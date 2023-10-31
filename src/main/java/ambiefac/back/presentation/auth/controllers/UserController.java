@@ -17,7 +17,7 @@ public class UserController {
 
 
     @PostMapping("/demo")
-    public ResponseEntity<CredentialEntity> register(@Valid @RequestBody RegisterUserDto registerUserDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<?> register() {
+        return  ResponseEntity.status(HttpStatus.OK).body("Hola");
     }
 }

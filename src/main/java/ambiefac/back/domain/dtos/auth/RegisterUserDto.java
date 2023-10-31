@@ -18,11 +18,11 @@ public class RegisterUserDto implements UserDetails {
 
     @NotNull(message = "username invalid")
     private  String username;
-    @Email
+    @Email(message = "Email invalid")
     @NotNull
     private  String email;
-    @NotNull
-    @Size(min = 6)
+    @NotBlank(message = "password invalid")
+    @Size(min = 6,message = "password invalid")
     private String password;
 
 public RegisterUserDto(){}
