@@ -25,14 +25,26 @@ public class CredentialEntity implements UserDetails  {
     private String username;
     private  String password;
     private String email;
+    @ManyToOne(targetEntity = RoleEntity.class)
+    @JoinColumn(name = "role")
+    private RoleEntity role;
     private String JWT;
 
-    public CredentialEntity(Long credentialId, String username, String password, String email, String JWT) {
-        this.id = credentialId;
+    public CredentialEntity(Long id, String username, String password, String email, RoleEntity role, String JWT) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
         this.JWT = JWT;
+    }
+
+    public RoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 
     public Long getId() {

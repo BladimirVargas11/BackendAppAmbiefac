@@ -1,7 +1,6 @@
 package ambiefac.back.config;
 
-import ambiefac.back.domain.repositories.AuthRepository;
-import lombok.RequiredArgsConstructor;
+import ambiefac.back.data.Credential;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class ApplicationConfig {
 
-    private  final AuthRepository authRepository;
+    private  final Credential credential;
 
-    public ApplicationConfig(AuthRepository authRepository) {
-        this.authRepository = authRepository;
+    public ApplicationConfig(Credential credential) {
+        this.credential = credential;
     }
 
     @Bean
@@ -40,7 +39,7 @@ public class ApplicationConfig {
     }
     @Bean
     public UserDetailsService userDetailService() {
-        return username -> authRepository.findByUsername(username);
+        return username -> credential.findByUsername(username);
     }
 
 

@@ -1,5 +1,6 @@
 package ambiefac.back.domain.dtos.auth;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,13 +18,15 @@ import java.util.List;
 public class RegisterUserDto implements UserDetails {
 
     @NotNull(message = "username invalid")
+    @Column(unique = true)
     private  String username;
     @Email(message = "Email invalid")
     @NotNull
     private  String email;
-    @NotBlank(message = "password invalid")
+    @NotNull(message = "password invalid")
     @Size(min = 6,message = "password invalid")
     private String password;
+
 
 public RegisterUserDto(){}
 public RegisterUserDto(String username, String email, String password){

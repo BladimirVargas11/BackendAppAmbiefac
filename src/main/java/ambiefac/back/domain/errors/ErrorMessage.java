@@ -1,12 +1,24 @@
 package ambiefac.back.domain.errors;
 
+import io.swagger.models.auth.In;
+
+import java.util.List;
+
 public class ErrorMessage {
 
-    private String status;
-    private String message;
+    private String error;
 
-    public ErrorMessage(String status, String message){
-        this.message = message;
-        this.status = status;
+    public ErrorMessage(String error) {
+        this.error = error;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }
+
+

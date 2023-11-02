@@ -1,14 +1,14 @@
 package ambiefac.back.domain.repositories;
 
+import ambiefac.back.domain.dtos.auth.LoginUserDto;
+import ambiefac.back.domain.dtos.auth.RegisterUserDto;
 import ambiefac.back.domain.entities.CredentialEntity;
-import org.springframework.data.repository.CrudRepository;
+import ambiefac.back.domain.errors.CustomError;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
+public abstract class AuthRepository {
 
-public interface AuthRepository extends CrudRepository<CredentialEntity, Long> {
+    public abstract UserDetails loginCredentials(LoginUserDto loginUserDto) throws CustomError;
 
-    Optional<CredentialEntity> findByEmail(String email);
-
-    UserDetails findByUsername(String username);
+    public abstract CredentialEntity registerCredentials(RegisterUserDto registerUserDto);
 }
