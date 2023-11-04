@@ -1,19 +1,11 @@
 package ambiefac.back.domain.errors;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.*;
 
+import org.springframework.http.*;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.lang.model.type.ErrorType;
-import java.net.URI;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 

@@ -8,6 +8,7 @@ import ambiefac.back.domain.errors.EmailAlreadyExists;
 import ambiefac.back.domain.errors.UsernameAlreadyExistsException;
 import ambiefac.back.domain.repositories.AuthRepository;
 import ambiefac.back.domain.useCases.auth.LoginUseCase;
+import ambiefac.back.domain.useCases.auth.RegisterUseCase;
 import ambiefac.back.presentation.auth.services.AuthService;
 import com.sun.jdi.request.InvalidRequestStateException;
 import jakarta.validation.ConstraintViolationException;
@@ -37,10 +38,12 @@ public class AuthController {
         @PostMapping("/register")
         public ResponseEntity<?> register(@Valid  @RequestBody RegisterUserDto registerUserDto) {
             try {
-                CredentialEntity credential = authRepository.registerCredentials(registerUserDto);
-                return ResponseEntity.status(HttpStatus.CREATED).body(credential);
-            } catch (Exception exc) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exc.getMessage());
+                return ResponseEntity.status(HttpStatus.OK).body(new RegisterUseCase(this.authRepository).execute(registerUserDto));
+
+            } catch ( UsernameAlreadyExistsException | EmailAlreadyExists e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }catch (Exception e){
+                return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
             }
         }
 

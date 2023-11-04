@@ -3,7 +3,7 @@ package ambiefac.back.infrastructure.repositories;
 import ambiefac.back.domain.datasources.AuthDatasource;
 import ambiefac.back.domain.dtos.auth.LoginUserDto;
 import ambiefac.back.domain.dtos.auth.RegisterUserDto;
-import ambiefac.back.domain.entities.CredentialEntity;
+import ambiefac.back.domain.dtos.auth.ResponseRegisterDto;
 import ambiefac.back.domain.errors.CustomError;
 import ambiefac.back.domain.repositories.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class AuthRepositoryImpl extends AuthRepository {
     }
 
     @Override
-    public CredentialEntity registerCredentials(RegisterUserDto registerUserDto) {
+    public ResponseRegisterDto registerCredentials(RegisterUserDto registerUserDto) {
         return this.authDatasource.registerCredentials(registerUserDto);
     }
 }

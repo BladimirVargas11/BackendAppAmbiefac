@@ -1,5 +1,6 @@
 package ambiefac.back.domain.dtos.auth;
 
+import ambiefac.back.domain.entities.ClientEntity;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -26,14 +27,25 @@ public class RegisterUserDto implements UserDetails {
     @NotNull(message = "password invalid")
     @Size(min = 6,message = "password invalid")
     private String password;
+    @NotNull
+    private ClientEntity client;
 
 
 public RegisterUserDto(){}
-public RegisterUserDto(String username, String email, String password){
+public RegisterUserDto(String username, String email, String password, ClientEntity client){
     this.username = username;
     this.password = password;
     this.email = email;
+    this.client = client;
 }
+
+    public ClientEntity getClient() {
+        return client;
+    }
+
+    public void setClient(ClientEntity client) {
+        this.client = client;
+    }
 
     public String getUsername() {
         return username;
@@ -73,7 +85,7 @@ public RegisterUserDto(String username, String email, String password){
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("CLIENT"));
     }
 
     public String getPassword() {

@@ -1,6 +1,6 @@
 package ambiefac.back.domain.entities;
 
-import ambiefac.back.domain.enums.RoleId;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
