@@ -12,6 +12,7 @@ public class TopicEntity {
     private Long id;
     private String name;
     private String time;
+    private String description;
 
 
     public Long getId() {
@@ -36,5 +37,13 @@ public class TopicEntity {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
