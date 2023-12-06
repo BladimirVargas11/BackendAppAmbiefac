@@ -1,7 +1,8 @@
 package ambiefac.back.infrastructure.repositories;
 
-import ambiefac.back.data.TopicResponse;
+import ambiefac.back.data.response.TopicResponse;
 import ambiefac.back.domain.datasources.TopicDatasource;
+import ambiefac.back.domain.entities.TopicEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,30 @@ public class TopicRepositoryImpl extends ambiefac.back.domain.repositories.Topic
     public List<TopicResponse> findTopics() {
         return topicDatasource.findTopics();
     }
+
+  @Override
+  public TopicResponse findTopic(Long topicId) {
+    return topicDatasource.findTopic(topicId);
+  }
+
+  @Override
+  public TopicEntity saveWithSubtopic(TopicEntity topic) {
+    return topicDatasource.saveWithSubtopic(topic);
+  }
+
+  @Override
+  public TopicEntity save(TopicEntity topic) {
+    return topicDatasource.save(topic);
+  }
+
+  @Override
+  public TopicEntity updateTopic(Long id, TopicEntity topic) {
+    return topicDatasource.save(topic);
+  }
+
+  @Override
+  public String deleteTopic(Long id) {
+    return topicDatasource.deleteTopic(id);
+  }
+
 }

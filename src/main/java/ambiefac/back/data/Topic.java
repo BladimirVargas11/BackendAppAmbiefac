@@ -1,5 +1,8 @@
 package ambiefac.back.data;
 
+import ambiefac.back.data.response.InformationResponse;
+import ambiefac.back.data.response.SubtopicResponse;
+import ambiefac.back.data.response.TopicResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,10 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class Topic{
@@ -18,6 +18,10 @@ public class Topic{
     private JdbcTemplate jdbcTemplate;
 
     public Topic(){}
+
+
+
+
 
     public List<TopicResponse> findTopic(){
 
@@ -31,7 +35,7 @@ public class Topic{
                 "FROM\n" +
                 "  topic\n" +
                 "  LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
-                "  LEFT JOIN information ON subtopic.id = information.subtopic";
+                "  LEFT JOIN information ON subtopic.id = information.subtopic WHERE topic.deleted = false";
 
         Map<Long, TopicResponse> topicMap = new HashMap<>();
          jdbcTemplate.query(sql, new RowMapper<TopicResponse>() {
@@ -69,6 +73,52 @@ public class Topic{
         return new ArrayList<>(topicMap.values());
 
     }
+
+    public TopicResponse obtenerInformacionPorCurso(Long cursoId) {
+        String sql = "SELECT topic.id, topic.name, " +
+                "subtopic.id AS subtopic_id, subtopic.name AS subtopic_name, information.id AS information_id," +
+                " information.content, information.has_video, information.link_video " +
+                "FROM topic " +
+                "LEFT JOIN subtopic ON topic.id = subtopic.topic " +
+                "LEFT JOIN information ON subtopic.id = information.subtopic " +
+                "WHERE topic.id = ? " +
+                "ORDER BY topic.name ";
+
+        Map<Long, TopicResponse> topicMap = new HashMap<>();
+
+        List<TopicResponse> result = jdbcTemplate.query(sql, new Object[]{cursoId}, (rs, rowNum) -> {
+            Long topicId = rs.getLong("id");
+
+            if (!topicMap.containsKey(topicId)) {
+                TopicResponse topicDTO = new TopicResponse();
+                topicDTO.setId(topicId);
+                topicDTO.setName(rs.getString("name"));
+                topicDTO.setSubtopic(new ArrayList<>());
+                topicMap.put(topicId, topicDTO);
+            }
+
+            SubtopicResponse subtopicDTO = new SubtopicResponse();
+            subtopicDTO.setSubtopic_id(rs.getLong("subtopic_id"));
+            subtopicDTO.setSubtopic_name(rs.getString("subtopic_name"));
+
+            InformationResponse informationDTO = new InformationResponse();
+            informationDTO.setInformation_id(rs.getLong("information_id"));
+            informationDTO.setContent(rs.getString("content"));
+            informationDTO.setHas_video(rs.getString("has_video"));
+            informationDTO.setLink_video(rs.getString("link_video"));
+
+            topicMap.get(topicId).getSubtopic().add(subtopicDTO);
+            subtopicDTO.setInformation(Collections.singletonList(informationDTO));
+
+            return null;
+        });
+
+        List<TopicResponse> resultList = new ArrayList<>(topicMap.values());
+
+
+        return resultList.isEmpty() ? null : resultList.get(0);
+    }
+
 
 
 }

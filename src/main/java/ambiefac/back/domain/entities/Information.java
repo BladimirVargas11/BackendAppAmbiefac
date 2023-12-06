@@ -3,19 +3,19 @@ package ambiefac.back.domain.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "information")
-public class InformationEntity {
+public class Information {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String content;
     private String hasVideo;
     private String linkVideo;
 
-    @OneToOne(targetEntity = SubtopicEntity.class )
+    @ManyToOne
     @JoinColumn(name = "subtopic")
-    private SubtopicEntity subtopic;
+    private Subtopic subtopic;
 
     public Long getId() {
         return id;
@@ -49,11 +49,11 @@ public class InformationEntity {
         this.linkVideo = linkVideo;
     }
 
-    public SubtopicEntity getSubtopic() {
+    public Subtopic getSubtopic() {
         return subtopic;
     }
 
-    public void setSubtopic(SubtopicEntity subtopic) {
+    public void setSubtopic(Subtopic subtopic) {
         this.subtopic = subtopic;
     }
 }

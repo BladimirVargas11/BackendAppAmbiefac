@@ -2,22 +2,23 @@ package ambiefac.back.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "topic")
-public class TopicEntity {
+public class Topic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String time;
     private String description;
 
-    private Boolean deleted;
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subtopic> subtopics = new ArrayList<>();
 
-    public TopicEntity(){
-        this.deleted = false;
-    }
     public Long getId() {
         return id;
     }
@@ -50,11 +51,11 @@ public class TopicEntity {
         this.description = description;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
+    public List<Subtopic> getSubtopics() {
+        return subtopics;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public void setSubtopics(List<Subtopic> subtopics) {
+        this.subtopics = subtopics;
     }
 }

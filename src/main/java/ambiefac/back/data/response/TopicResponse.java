@@ -1,4 +1,6 @@
-package ambiefac.back.data;
+package ambiefac.back.data.response;
+
+import ambiefac.back.data.response.SubtopicResponse;
 
 import java.util.List;
 
