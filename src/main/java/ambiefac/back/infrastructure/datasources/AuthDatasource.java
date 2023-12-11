@@ -43,7 +43,7 @@ public class AuthDatasource extends ambiefac.back.domain.datasources.AuthDatasou
         this.authenticationManager = authenticationManager;
     }
 
-    public UserDetails loginCredentials(LoginUserDto loginUserDto) throws CustomError {
+    public UserDetails loginCredentials(LoginUserDto loginUserDto) {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginUserDto.getUsername(),loginUserDto.getPassword()));
@@ -51,12 +51,13 @@ public class AuthDatasource extends ambiefac.back.domain.datasources.AuthDatasou
             if(user==null){
                 throw new EmailNotFoundException("User no exists");
             }
+
             CredentialEntity newUser = (CredentialEntity) user;
             String token = jwtService.getToken(user);
             newUser.setJWT(token);
             return newUser;
         }catch (Exception e){
-            throw new InternalAuthenticationServiceException("Error al intentar autenticarse");
+            throw new InternalAuthenticationServiceException(e.getMessage());
         }
     }
 

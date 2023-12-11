@@ -1,15 +1,14 @@
 package ambiefac.back.domain.errors;
 
-public class CustomError extends Exception{
+public class CustomError {
 
     private int status;
     private String message;
-    CustomError(int status, String message){
-        super(message);
-    }
 
-    public static CustomError notFound(String message){
-        return new CustomError(404,message);
+
+    public CustomError(int status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
     public int getStatus() {
@@ -20,7 +19,6 @@ public class CustomError extends Exception{
         this.status = status;
     }
 
-    @Override
     public String getMessage() {
         return message;
     }

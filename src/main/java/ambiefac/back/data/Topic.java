@@ -3,7 +3,9 @@ package ambiefac.back.data;
 import ambiefac.back.data.response.InformationResponse;
 import ambiefac.back.data.response.SubtopicResponse;
 import ambiefac.back.data.response.TopicResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -27,11 +29,11 @@ public class Topic{
 
         String sql = "SELECT\n" +
                 "  topic.id,\n" +
-                "  topic.name,\n" +
+                "  topic.name, topic.time, topic.link_image,\n" +
                 "  subtopic.id,\n" +
                 "  subtopic.name AS 'subtopic_name',\n" +
                 "  information.id,\n" +
-                "  information.content\n" +
+                "  information.content,information.type,information.position,information.has_video,information.link_video\n" +
                 "FROM\n" +
                 "  topic\n" +
                 "  LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
@@ -47,6 +49,8 @@ public class Topic{
                     TopicResponse topicResponse = new TopicResponse();
                     topicResponse.setId(topicId);
                     topicResponse.setName(rs.getString("name"));
+                    topicResponse.setTime(rs.getString("time"));
+                    topicResponse.setLinkImage(rs.getString("link_image"));
                     topicResponse.setSubtopic(new ArrayList<>());
                     topicMap.put(topicId,topicResponse);
                 }
@@ -59,6 +63,10 @@ public class Topic{
                 InformationResponse informationResponse = new InformationResponse();
                 informationResponse.setInformation_id(rs.getLong("id"));
                 informationResponse.setContent(rs.getString("content"));
+                informationResponse.setHas_video(rs.getString("has_video"));
+                informationResponse.setLink_video(rs.getString("link_video"));
+                informationResponse.setType(rs.getString("type"));
+                informationResponse.setPosition(rs.getLong("position"));
 
 
                 topicMap.get(topicId).getSubtopic().add(subtopicResponse);
@@ -74,8 +82,8 @@ public class Topic{
 
     }
 
-    public TopicResponse obtenerInformacionPorCurso(Long cursoId) {
-        String sql = "SELECT topic.id, topic.name, " +
+    public TopicResponse obtenerInformacionPorCurso(@Param("cursoId") Long cursoId) {
+        String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image, " +
                 "subtopic.id AS subtopic_id, subtopic.name AS subtopic_name, information.id AS information_id," +
                 " information.content, information.has_video, information.link_video " +
                 "FROM topic " +

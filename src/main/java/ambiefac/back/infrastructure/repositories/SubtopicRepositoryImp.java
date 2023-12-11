@@ -1,9 +1,12 @@
 package ambiefac.back.infrastructure.repositories;
 
 import ambiefac.back.domain.datasources.SubtopicDatasource;
+import ambiefac.back.domain.dtos.subtopic.RegisterSubtopicDto;
 import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.repositories.SubtopicRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SubtopicRepositoryImp extends SubtopicRepository {
 
     private final SubtopicDatasource subtopicDatasource;
@@ -13,7 +16,7 @@ public class SubtopicRepositoryImp extends SubtopicRepository {
     }
 
     @Override
-    public SubtopicEntity save(SubtopicEntity subtopic) {
+    public SubtopicEntity save(RegisterSubtopicDto subtopic) {
         return subtopicDatasource.save(subtopic);
     }
 }

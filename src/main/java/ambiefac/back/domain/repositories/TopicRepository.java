@@ -1,6 +1,7 @@
 package ambiefac.back.domain.repositories;
 
 import ambiefac.back.data.response.TopicResponse;
+import ambiefac.back.domain.dtos.topic.RegisterTopicDto;
 import ambiefac.back.domain.entities.TopicEntity;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public  abstract class TopicRepository {
 
     public abstract TopicEntity saveWithSubtopic(TopicEntity topic);
 
-    public abstract TopicEntity save(TopicEntity topic);
+    public abstract TopicEntity save(RegisterTopicDto topic);
 
     public abstract  TopicEntity updateTopic(Long id,TopicEntity topic);
 

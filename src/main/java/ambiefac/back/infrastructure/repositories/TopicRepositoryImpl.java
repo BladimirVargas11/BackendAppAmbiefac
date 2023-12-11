@@ -2,6 +2,7 @@ package ambiefac.back.infrastructure.repositories;
 
 import ambiefac.back.data.response.TopicResponse;
 import ambiefac.back.domain.datasources.TopicDatasource;
+import ambiefac.back.domain.dtos.topic.RegisterTopicDto;
 import ambiefac.back.domain.entities.TopicEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,13 @@ public class TopicRepositoryImpl extends ambiefac.back.domain.repositories.Topic
   }
 
   @Override
-  public TopicEntity save(TopicEntity topic) {
+  public TopicEntity save(RegisterTopicDto topic) {
     return topicDatasource.save(topic);
   }
 
   @Override
   public TopicEntity updateTopic(Long id, TopicEntity topic) {
-    return topicDatasource.save(topic);
+    return null;
   }
 
   @Override

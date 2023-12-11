@@ -17,11 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
+
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,20 +38,23 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.OK).body(new RegisterUseCase(this.authRepository).execute(registerUserDto));
 
             } catch ( UsernameAlreadyExistsException | EmailAlreadyExists e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+                CustomError error = new CustomError(400,e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }catch (Exception e){
-                return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+                CustomError error = new CustomError(400,e.getMessage());
+                return  ResponseEntity.status(error.getStatus()).body(error);
             }
         }
 
         @PostMapping("/login")
-        public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) throws CustomError {
+        public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) {
 
             try {
                 return ResponseEntity.status(HttpStatus.OK).body(new LoginUseCase(this.authRepository).execute(loginUserDto));
 
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+                CustomError error = new CustomError(401,e.getMessage());
+                return ResponseEntity.status(error.getStatus()).body(error);
             }
         }
 

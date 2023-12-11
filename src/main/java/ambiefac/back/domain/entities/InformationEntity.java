@@ -10,8 +10,9 @@ public class InformationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private String hasVideo;
-    private String linkVideo;
+    private String title;
+    private String type;
+    private Long position;
 
     @OneToOne(targetEntity = SubtopicEntity.class )
     @JoinColumn(name = "subtopic")
@@ -33,20 +34,12 @@ public class InformationEntity {
         this.content = content;
     }
 
-    public String getHasVideo() {
-        return hasVideo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setHasVideo(String hasVideo) {
-        this.hasVideo = hasVideo;
-    }
-
-    public String getLinkVideo() {
-        return linkVideo;
-    }
-
-    public void setLinkVideo(String linkVideo) {
-        this.linkVideo = linkVideo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public SubtopicEntity getSubtopic() {
@@ -55,5 +48,21 @@ public class InformationEntity {
 
     public void setSubtopic(SubtopicEntity subtopic) {
         this.subtopic = subtopic;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Long getPosition() {
+        return position;
+    }
+
+    public void setPosition(Long position) {
+        this.position = position;
     }
 }

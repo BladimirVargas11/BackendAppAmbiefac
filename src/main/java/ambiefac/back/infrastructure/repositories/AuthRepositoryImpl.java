@@ -16,7 +16,7 @@ public class AuthRepositoryImpl extends AuthRepository {
     @Autowired
     private AuthDatasource authDatasource;
     @Override
-    public UserDetails loginCredentials(LoginUserDto loginUserDto) throws CustomError {
+    public UserDetails loginCredentials(LoginUserDto loginUserDto) {
         return this.authDatasource.loginCredentials(loginUserDto);
     }
 

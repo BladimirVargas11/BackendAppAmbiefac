@@ -13,6 +13,10 @@ public class LoginUserDto {
     @NotBlank(message = "Password is required")
     private String password;
 
+
+
+    public LoginUserDto(){}
+
     public String getUsername() {
         return username;
     }

@@ -1,6 +1,5 @@
 package ambiefac.back.data.request;
 
-import ambiefac.back.data.request.InformationRequest;
 
 import java.util.List;
 

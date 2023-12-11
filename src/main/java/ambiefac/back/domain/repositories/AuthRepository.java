@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public abstract class AuthRepository {
 
-    public abstract UserDetails loginCredentials(LoginUserDto loginUserDto) throws CustomError;
+    public abstract UserDetails loginCredentials(LoginUserDto loginUserDto);
 
     public abstract ResponseRegisterDto registerCredentials(RegisterUserDto registerUserDto);
 }

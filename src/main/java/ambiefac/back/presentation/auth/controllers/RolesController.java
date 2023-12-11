@@ -2,19 +2,27 @@ package ambiefac.back.presentation.auth.controllers;
 
 import ambiefac.back.data.IRoles;
 import ambiefac.back.domain.entities.RoleEntity;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+
 @RestController
 @RequestMapping("/role")
 public class RolesController {
-
-    private final IRoles roleService;
+	
+	@Autowired
+    private IRoles roleService;
 
     public RolesController(IRoles roleService) {
         this.roleService = roleService;
@@ -28,6 +36,12 @@ public class RolesController {
             throw new  Error(e.getMessage());
         }
     }
+    
+    @PostMapping("/save")
+   
+    public ResponseEntity<?> save(@RequestBody @Valid RoleEntity role) {
+		return ResponseEntity.status(200).body(roleService.save(role));
+	}
 
 
 }

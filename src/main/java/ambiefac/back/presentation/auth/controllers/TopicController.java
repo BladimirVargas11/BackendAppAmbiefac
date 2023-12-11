@@ -6,13 +6,21 @@ import ambiefac.back.data.request.InformationRequest;
 import ambiefac.back.data.request.SubtopicRequest;
 import ambiefac.back.data.request.TopicRequest;
 import ambiefac.back.data.response.TopicResponse;
+import ambiefac.back.domain.dtos.topic.RegisterTopicDto;
 import ambiefac.back.domain.entities.*;
+
 import ambiefac.back.domain.repositories.TopicRepository;
+
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.HashMap;
+
 import java.util.Map;
 
 @RestController
@@ -43,15 +51,13 @@ public class TopicController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody TopicEntity topicEntity){
-        try{
+    public ResponseEntity<?> save(@Valid @RequestBody  RegisterTopicDto topicEntity, BindingResult bindingResult){
+
             Map<String, Object> resultado = new HashMap<>();
             TopicEntity topic = topicRepository.save(topicEntity);
             resultado.put("topicId",topic.getId());
             return ResponseEntity.status(200).body(resultado);
-        }catch (RuntimeException e){
-            throw new Error(e.getMessage());
-        }
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -78,7 +84,7 @@ public class TopicController {
 
     @PostMapping("/saveWitSubtopic")
     public ResponseEntity<?> saveTopic(@RequestBody TopicRequest topicRequest){
-        TopicEntity topic = convertToTopic(topicRequest);
+       /* TopicEntity topic = convertToTopic(topicRequest);
         this.topicRepository.saveWithSubtopic(topic);
         for(SubtopicRequest subtopicRequest:topicRequest.getSubtopics()){
             SubtopicEntity subtopicEntity = new SubtopicEntity();
@@ -103,8 +109,8 @@ public class TopicController {
         topicEntity.setTime(topicRequest.getTime());
         topicEntity.setDescription(topicRequest.getTopicDescription());
 
-
-        return topicEntity;
+    */
+        return null;
     }
 
 

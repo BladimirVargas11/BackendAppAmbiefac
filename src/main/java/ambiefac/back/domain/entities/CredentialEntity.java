@@ -29,6 +29,8 @@ public class CredentialEntity implements UserDetails  {
     @JoinColumn(name = "role")
     private RoleEntity role;
     private String JWT;
+    
+
 
     public CredentialEntity(Long id, String username, String password, String email, RoleEntity role, String JWT) {
         this.id = id;

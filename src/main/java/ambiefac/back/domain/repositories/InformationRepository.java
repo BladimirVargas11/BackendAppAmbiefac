@@ -1,8 +1,12 @@
 package ambiefac.back.domain.repositories;
 
+import ambiefac.back.domain.dtos.information.RegisterInformationDto;
+import ambiefac.back.domain.dtos.information.RegisterListInformationDto;
 import ambiefac.back.domain.entities.InformationEntity;
+
+import java.util.List;
 
 public abstract class InformationRepository {
 
-    public abstract InformationEntity save(InformationEntity information);
+    public abstract String save(RegisterListInformationDto information);
 }

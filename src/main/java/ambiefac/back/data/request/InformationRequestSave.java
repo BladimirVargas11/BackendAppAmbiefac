@@ -5,6 +5,8 @@ public class InformationRequestSave {
     private String content;
     private String hasVideo;
     private String linkVideo;
+    private String type;
+    private Long position;
     private Long idSubtopic;
 
     public String getContent() {
@@ -37,5 +39,21 @@ public class InformationRequestSave {
 
     public void setIdSubtopic(Long idSubtopic) {
         this.idSubtopic = idSubtopic;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Long getPosition() {
+        return position;
+    }
+
+    public void setPosition(Long position) {
+        this.position = position;
     }
 }

@@ -3,14 +3,18 @@ package ambiefac.back.infrastructure.datasources;
 import ambiefac.back.data.Topic;
 import ambiefac.back.data.response.TopicResponse;
 import ambiefac.back.data.TopicSave;
+import ambiefac.back.domain.dtos.topic.RegisterTopicDto;
 import ambiefac.back.domain.entities.TopicEntity;
+import ambiefac.back.domain.errors.NullPointerException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Validated
 public class TopicDatasource extends ambiefac.back.domain.datasources.TopicDatasource {
 
     private final Topic topic;
@@ -46,8 +50,18 @@ public class TopicDatasource extends ambiefac.back.domain.datasources.TopicDatas
     }
 
     @Override
-    public TopicEntity save(TopicEntity topic) {
-        return topicSave.save(topic);
+    public TopicEntity save(RegisterTopicDto topic) {
+
+
+           if(topic == null){
+               throw new NullPointerException("Faltan campos");
+           }
+           TopicEntity topicEntity = new TopicEntity();
+           topicEntity.setName(topic.getName());
+           topicEntity.setDescription(topic.getDescription());
+           topicEntity.setTime(topic.getTime());
+           topicEntity.setLinkImage(topic.getLinkImage());
+           return topicSave.save(topicEntity);
     }
 
     @Override
@@ -57,6 +71,7 @@ public class TopicDatasource extends ambiefac.back.domain.datasources.TopicDatas
             topicIsPresent.get().setName(topic.getName());
             topicIsPresent.get().setDescription(topic.getDescription());
             topicIsPresent.get().setTime(topic.getTime());
+            topicIsPresent.get().setLinkImage(topic.getLinkImage());
             return topicSave.save(topicIsPresent.get());
         } else {
             throw new EntityNotFoundException();

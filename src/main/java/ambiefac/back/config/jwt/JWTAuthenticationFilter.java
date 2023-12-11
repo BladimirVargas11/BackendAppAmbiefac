@@ -1,11 +1,16 @@
 package ambiefac.back.config.jwt;
 
+import ambiefac.back.domain.errors.CustomError;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,20 +46,28 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
              return;
         }
 
-        username = JWTService.getUsernameFromToken(token);
+      try{
+          username = JWTService.getUsernameFromToken(token);
 
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if(JWTService.isTokenValid(token,userDetails)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,null,userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
+          if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+              UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+              if(JWTService.isTokenValid(token,userDetails)){
+                  UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                          userDetails,null,userDetails.getAuthorities()
+                  );
+                  authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                  SecurityContextHolder.getContext().setAuthentication(authToken);
+              }
+          }
 
-    filterChain.doFilter(request,response);
+          filterChain.doFilter(request,response);
+      }catch (ExpiredJwtException exception){
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+          CustomError customError = new CustomError(401,"Token expired");
+          ObjectMapper objectMapper = new ObjectMapper();
+          String jsonError = objectMapper.writeValueAsString(customError);
+        response.getWriter().write(jsonError);
+      }
 
     }
 

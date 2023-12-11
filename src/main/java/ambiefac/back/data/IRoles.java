@@ -7,4 +7,6 @@ import java.util.List;
 public interface IRoles {
 
     List<RoleEntity> findAll();
+    
+    RoleEntity save(RoleEntity role);
 }

@@ -8,14 +8,18 @@ public class TopicResponse {
 
     private Long id;
     private String name;
+    private String time;
+    private String linkImage;
 
     private List<SubtopicResponse> subtopic;
 
     public TopicResponse(){}
 
-    public TopicResponse(Long id, String name, List<SubtopicResponse> subtopic) {
+    public TopicResponse(Long id, String name, String time, String linkImage, List<SubtopicResponse> subtopic) {
         this.id = id;
         this.name = name;
+        this.time = time;
+        this.linkImage = linkImage;
         this.subtopic = subtopic;
     }
 
@@ -41,5 +45,21 @@ public class TopicResponse {
 
     public void setSubtopic(List<SubtopicResponse> subtopic) {
         this.subtopic = subtopic;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getLinkImage() {
+        return linkImage;
+    }
+
+    public void setLinkImage(String linkImage) {
+        this.linkImage = linkImage;
     }
 }

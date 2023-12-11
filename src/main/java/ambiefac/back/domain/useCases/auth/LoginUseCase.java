@@ -26,7 +26,7 @@ public class LoginUseCase {
     }
 
 
-    public UserDetails execute(LoginUserDto loginUserDto) throws CustomError {
+    public UserDetails execute(LoginUserDto loginUserDto){
 
         return this.authRepository.loginCredentials(loginUserDto);
     }

@@ -11,9 +11,11 @@ public class SubtopicEntity {
     private Long id;
 
     private String name;
+    private Boolean deleted;
     @ManyToOne(targetEntity = TopicEntity.class)
     @JoinColumn(name = "topic")
     private TopicEntity topic;
+
 
     public Long getId() {
         return id;
@@ -37,5 +39,13 @@ public class SubtopicEntity {
 
     public void setTopic(TopicEntity topic) {
         this.topic = topic;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

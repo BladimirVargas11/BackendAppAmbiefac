@@ -5,13 +5,17 @@ import org.springframework.http.*;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 
-@ControllerAdvice
+
 public  class ExceptionHandler  {
+
 
 
 
@@ -33,6 +37,7 @@ public  class ExceptionHandler  {
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
+        System.out.println("pasando por la validacion");
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
@@ -55,7 +60,7 @@ public  class ExceptionHandler  {
         return new ResponseEntity<>(exc.getMessage(),HttpStatus.CONFLICT);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(CustomError.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler()
     public ResponseEntity<Object> handleCustomErrors(CustomError ex,WebRequest web) {
         //return new ResponseEntity<>(ex.getMessage(), HttpStatusCode.valueOf(ex.getStatus()));
         System.out.println("Excepción manejada por @ControllerAdvice: " + ex.getMessage());

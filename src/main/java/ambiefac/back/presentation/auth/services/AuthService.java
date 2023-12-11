@@ -26,7 +26,7 @@ public class AuthService {
         this.authDatasource = authDatasource;
     }
 
-    public UserDetails login(LoginUserDto loginUserDto) throws CustomError {
+    public UserDetails login(LoginUserDto loginUserDto) {
        return  authDatasource.loginCredentials(loginUserDto);
 
     }

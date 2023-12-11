@@ -21,4 +21,9 @@ public class RoleService  implements IRoles {
     public List<RoleEntity> findAll() {
         return (List<RoleEntity>) roleRepositoy.findAll();
     }
+    
+    
+    public RoleEntity save(RoleEntity roleEntity) {
+    	return roleRepositoy.save(roleEntity);
+    }
 }
