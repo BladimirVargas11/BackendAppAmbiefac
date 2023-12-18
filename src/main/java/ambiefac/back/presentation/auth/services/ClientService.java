@@ -20,4 +20,10 @@ public class ClientService implements IClient {
     public Optional<ClientEntity> findById(Long id) {
         return clientRepository.findById(id);
     }
+
+    @Override
+    public ClientEntity save(ClientEntity clientEntity) {
+        return clientRepository.save(clientEntity);
+    }
+
 }

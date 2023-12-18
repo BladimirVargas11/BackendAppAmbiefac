@@ -1,7 +1,7 @@
 package ambiefac.back.domain.useCases.auth;
 
 import ambiefac.back.domain.dtos.auth.RegisterUserDto;
-import ambiefac.back.domain.dtos.auth.ResponseRegisterDto;
+import ambiefac.back.data.response.ResponseRegisterDto;
 import ambiefac.back.domain.repositories.AuthRepository;
 
 public class RegisterUseCase {

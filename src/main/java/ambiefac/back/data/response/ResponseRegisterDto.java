@@ -1,4 +1,4 @@
-package ambiefac.back.domain.dtos.auth;
+package ambiefac.back.data.response;
 
 import ambiefac.back.domain.entities.ClientEntity;
 import jakarta.persistence.Column;

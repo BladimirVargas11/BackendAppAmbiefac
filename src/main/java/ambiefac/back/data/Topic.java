@@ -31,9 +31,7 @@ public class Topic{
                 "  topic.id,\n" +
                 "  topic.name, topic.time, topic.link_image,\n" +
                 "  subtopic.id,\n" +
-                "  subtopic.name AS 'subtopic_name',\n" +
-                "  information.id,\n" +
-                "  information.content,information.type,information.position,information.has_video,information.link_video\n" +
+                "  subtopic.name AS 'subtopic_name'\n" +
                 "FROM\n" +
                 "  topic\n" +
                 "  LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
@@ -60,17 +58,11 @@ public class Topic{
                 subtopicResponse.setSubtopic_name(rs.getString("subtopic_name"));
                 subtopicResponse.setInformation(new ArrayList<>());
 
-                InformationResponse informationResponse = new InformationResponse();
-                informationResponse.setInformation_id(rs.getLong("id"));
-                informationResponse.setContent(rs.getString("content"));
-                informationResponse.setHas_video(rs.getString("has_video"));
-                informationResponse.setLink_video(rs.getString("link_video"));
-                informationResponse.setType(rs.getString("type"));
-                informationResponse.setPosition(rs.getLong("position"));
+
 
 
                 topicMap.get(topicId).getSubtopic().add(subtopicResponse);
-                subtopicResponse.getInformation().add(informationResponse);
+
 
             return null;
 
@@ -85,7 +77,7 @@ public class Topic{
     public TopicResponse obtenerInformacionPorCurso(@Param("cursoId") Long cursoId) {
         String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image, " +
                 "subtopic.id AS subtopic_id, subtopic.name AS subtopic_name, information.id AS information_id," +
-                " information.content, information.has_video, information.link_video " +
+                " information.content, information.type, information.position " +
                 "FROM topic " +
                 "LEFT JOIN subtopic ON topic.id = subtopic.topic " +
                 "LEFT JOIN information ON subtopic.id = information.subtopic " +
@@ -112,8 +104,8 @@ public class Topic{
             InformationResponse informationDTO = new InformationResponse();
             informationDTO.setInformation_id(rs.getLong("information_id"));
             informationDTO.setContent(rs.getString("content"));
-            informationDTO.setHas_video(rs.getString("has_video"));
-            informationDTO.setLink_video(rs.getString("link_video"));
+            informationDTO.setTitle(rs.getString("title"));
+            informationDTO.setPosition(rs.getLong("position"));
 
             topicMap.get(topicId).getSubtopic().add(subtopicDTO);
             subtopicDTO.setInformation(Collections.singletonList(informationDTO));

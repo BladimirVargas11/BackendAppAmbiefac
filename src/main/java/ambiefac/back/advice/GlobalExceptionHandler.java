@@ -4,6 +4,7 @@ import ambiefac.back.domain.errors.CustomError;
 import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -25,8 +26,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<?> handleConstraintViolationExceptionSQL(SQLIntegrityConstraintViolationException exception) {
-        System.out.println("pasa por aca: "+exception.getClass());
-        return ResponseEntity.status(400).body(exception.getMessage());
+        CustomError customError = new CustomError(400,exception.getMessage());
+        return ResponseEntity.status(400).body(customError);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -43,24 +44,25 @@ public class GlobalExceptionHandler {
             String message = violation.getMessage();
             errors.put(propertyPath, message);
         }
-        return ResponseEntity.status(400).body(errors);
+        CustomError customError = new CustomError(400, String.valueOf(errors));
+        return ResponseEntity.status(400).body(customError);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeException(RuntimeException exception) {
-        System.out.println("pasa por aca: "+exception.getClass());
-        return ResponseEntity.status(400).body(exception.getMessage());
+        CustomError customError = new CustomError(400,exception.getMessage());
+        return ResponseEntity.status(400).body(customError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<CustomError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("message", "La solicitud contiene errores de validación");
         result.getFieldErrors().forEach(fieldError ->
                 errorResponse.put(fieldError.getField(), fieldError.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errorResponse);
+        CustomError customError = new CustomError(400,errorResponse.toString());
+        return ResponseEntity.badRequest().body(customError);
     }
 
     @ExceptionHandler(ClaimJwtException.class)
@@ -82,9 +84,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(customError.getStatus()).body(customError);
     }
 
+    @ExceptionHandler(MalformedJwtException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<CustomError> handleEntityNotFoundException(MalformedJwtException ex) {
+        CustomError customError = new CustomError(404,ex.getMessage());
+        return ResponseEntity.status(customError.getStatus()).body(customError);
+    }
+
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<?> handleNullPointer(NullPointerException nullPointerException) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(nullPointerException.getMessage());
+        CustomError customError = new CustomError(400,nullPointerException.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(customError);
     }
 }

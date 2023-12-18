@@ -1,5 +1,6 @@
 package ambiefac.back.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Getter
+@JsonIgnoreProperties({"password"})
 public class CredentialEntity implements UserDetails  {
 
     @Id

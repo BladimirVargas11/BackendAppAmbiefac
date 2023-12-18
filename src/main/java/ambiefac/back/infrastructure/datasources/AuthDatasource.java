@@ -4,11 +4,10 @@ import ambiefac.back.config.jwt.JWTService;
 import ambiefac.back.data.Client;
 import ambiefac.back.domain.dtos.auth.LoginUserDto;
 import ambiefac.back.domain.dtos.auth.RegisterUserDto;
-import ambiefac.back.domain.dtos.auth.ResponseRegisterDto;
+import ambiefac.back.data.response.ResponseRegisterDto;
 import ambiefac.back.domain.entities.ClientEntity;
 import ambiefac.back.domain.entities.CredentialEntity;
 import ambiefac.back.domain.entities.RoleEntity;
-import ambiefac.back.domain.errors.CustomError;
 import ambiefac.back.data.Credential;
 import ambiefac.back.data.Role;
 import ambiefac.back.domain.errors.EmailAlreadyExists;
@@ -21,8 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class AuthDatasource extends ambiefac.back.domain.datasources.AuthDatasource {

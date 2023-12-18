@@ -1,5 +1,6 @@
 package ambiefac.back.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "client")
 @Data
 @NoArgsConstructor
+
 public class ClientEntity {
 
     @Id

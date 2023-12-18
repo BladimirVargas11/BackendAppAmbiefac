@@ -1,13 +1,13 @@
 package ambiefac.back.presentation.auth.controllers;
 
 import ambiefac.back.data.IClient;
+import ambiefac.back.domain.dtos.auth.UpdateClientDto;
+import ambiefac.back.domain.entities.ClientEntity;
 import ambiefac.back.domain.repositories.ClientRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/client")
@@ -27,5 +27,11 @@ public class ClientController {
        }catch (Exception e){
            return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateClient(@Valid @RequestBody UpdateClientDto updateClientDto, @PathVariable Long id){
+        ClientEntity clientEntity = clientRepository.update(updateClientDto,id);
+        return ResponseEntity.status(200).body(clientEntity);
     }
 }

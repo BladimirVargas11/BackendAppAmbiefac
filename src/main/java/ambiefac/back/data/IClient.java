@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface IClient {
 
     Optional<ClientEntity> findById(Long id);
+
+    ClientEntity save(ClientEntity clientEntity);
 }

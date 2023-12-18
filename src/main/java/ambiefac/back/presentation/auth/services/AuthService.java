@@ -2,9 +2,8 @@ package ambiefac.back.presentation.auth.services;
 
 import ambiefac.back.domain.dtos.auth.LoginUserDto;
 import ambiefac.back.domain.dtos.auth.RegisterUserDto;
-import ambiefac.back.domain.dtos.auth.ResponseRegisterDto;
+import ambiefac.back.data.response.ResponseRegisterDto;
 import ambiefac.back.domain.entities.CredentialEntity;
-import ambiefac.back.domain.errors.CustomError;
 import ambiefac.back.domain.errors.EmailAlreadyExists;
 import ambiefac.back.domain.errors.UsernameAlreadyExistsException;
 import ambiefac.back.data.Credential;
