@@ -1,9 +1,11 @@
 package ambiefac.back.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "information")
+@JsonIgnoreProperties({"subtopic"})
 public class InformationEntity {
 
     @Id

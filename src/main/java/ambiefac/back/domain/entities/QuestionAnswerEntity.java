@@ -1,5 +1,6 @@
 package ambiefac.back.domain.entities;
 
+import ambiefac.back.data.response.AnswersResponse;
 import jakarta.persistence.*;
 
 @Entity

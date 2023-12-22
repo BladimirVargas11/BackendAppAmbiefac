@@ -30,6 +30,11 @@ public class InformationController {
 
     }
 
+    @GetMapping("bySubtopic/{id}")
+    public ResponseEntity<?> findInformationOfSubtopic(@PathVariable Long id){
+        return ResponseEntity.status(200).body(informationRepository.findInformationOfSubtopic(id));
+    }
+
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody UpdateListInformationDto updateListInformationDto) {
         return ResponseEntity.status(200).body(informationRepository.updateInformation(updateListInformationDto));

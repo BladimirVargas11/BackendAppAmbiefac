@@ -2,10 +2,7 @@ package ambiefac.back.infrastructure.datasources;
 
 import ambiefac.back.data.Information;
 import ambiefac.back.data.Subtopic;
-import ambiefac.back.domain.dtos.information.RegisterInformationDto;
-import ambiefac.back.domain.dtos.information.RegisterListInformationDto;
-import ambiefac.back.domain.dtos.information.UpdateInformationDto;
-import ambiefac.back.domain.dtos.information.UpdateListInformationDto;
+import ambiefac.back.domain.dtos.information.*;
 import ambiefac.back.domain.entities.InformationEntity;
 import ambiefac.back.domain.entities.SubtopicEntity;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,11 +27,16 @@ public class InformationDatasource extends ambiefac.back.domain.datasources.Info
     @Transactional
     public String save(RegisterListInformationDto information) {
 
-
         try {
-            for (RegisterInformationDto registerInformationDto : information.getListInformation()) {
-                InformationEntity informationEntity = convertDto(registerInformationDto);
-                informationRepository.save(informationEntity);
+            Optional<SubtopicEntity> subtopicEntity = subtopicRepository.findById(information.getIdSubtopic());
+            if(subtopicEntity.isPresent()){
+                for (InformationListDto informationListDto : information.getListInformation()) {
+                    InformationEntity informationEntity = convertDto(informationListDto);
+                    informationEntity.setSubtopic(subtopicEntity.get());
+                    informationRepository.save(informationEntity);
+                }
+            }else{
+                throw new EntityNotFoundException("No existe un subtopic con este id");
             }
             return "Se registro con exito";
         } catch (RuntimeException e) {
@@ -57,19 +59,23 @@ public class InformationDatasource extends ambiefac.back.domain.datasources.Info
         }
     }
 
-    private InformationEntity convertDto(RegisterInformationDto registerInformationDto){
-        Optional<SubtopicEntity> subtopicEntity = subtopicRepository.findById(registerInformationDto.getIdSubtopic());
-        if(subtopicEntity.isPresent()){
-            InformationEntity informationEntity = new InformationEntity();
-            informationEntity.setTitle(registerInformationDto.getTitle());
-            informationEntity.setContent(registerInformationDto.getContent());
-            informationEntity.setType(registerInformationDto.getType());
-            informationEntity.setPosition(registerInformationDto.getPosition());
-            informationEntity.setSubtopic(subtopicEntity.get());
-            return informationEntity;
-        }{
-            throw new EntityNotFoundException("There is no subtopic with this id");
+    @Override
+    public List<InformationEntity> findInformationOfSubtopic(Long id) {
+        try {
+            return informationRepository.findBySubtopicId(id);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private InformationEntity convertDto(InformationListDto informationListDto){
+
+            InformationEntity informationEntity = new InformationEntity();
+            informationEntity.setTitle(informationListDto.getTitle());
+            informationEntity.setContent(informationListDto.getContent());
+            informationEntity.setType(informationListDto.getType());
+            informationEntity.setPosition(informationListDto.getPosition());
+            return informationEntity;
     }
 
     private InformationEntity convertDtoUpdate(UpdateInformationDto updateInformationDto){

@@ -10,6 +10,7 @@ public class TopicResponse {
     private String name;
     private String time;
     private String linkImage;
+    private Long exam_id;
 
     private List<SubtopicResponse> subtopic;
 
@@ -21,6 +22,14 @@ public class TopicResponse {
         this.time = time;
         this.linkImage = linkImage;
         this.subtopic = subtopic;
+    }
+
+    public Long getExam_id() {
+        return exam_id;
+    }
+
+    public void setExam_id(Long exam_id) {
+        this.exam_id = exam_id;
     }
 
     public Long getId() {

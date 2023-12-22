@@ -12,4 +12,6 @@ public abstract class InformationDatasource {
     public abstract String  save(RegisterListInformationDto information);
 
     public abstract String updateInformation(UpdateListInformationDto updateListInformationDto);
+
+    public abstract List<InformationEntity> findInformationOfSubtopic(Long id);
 }

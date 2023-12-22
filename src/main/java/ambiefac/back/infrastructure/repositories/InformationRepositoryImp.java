@@ -9,6 +9,8 @@ import ambiefac.back.domain.repositories.InformationRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InformationRepositoryImp extends InformationRepository {
 
@@ -26,5 +28,10 @@ public class InformationRepositoryImp extends InformationRepository {
     @Override
     public String updateInformation(UpdateListInformationDto updateListInformationDto) {
         return informationDatasource.updateInformation(updateListInformationDto);
+    }
+
+    @Override
+    public List<InformationEntity> findInformationOfSubtopic(Long id) {
+        return informationDatasource.findInformationOfSubtopic(id);
     }
 }

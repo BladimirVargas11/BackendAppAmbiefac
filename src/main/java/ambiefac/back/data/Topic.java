@@ -75,13 +75,13 @@ public class Topic{
     }
 
     public TopicResponse obtenerInformacionPorCurso(@Param("cursoId") Long cursoId) {
-        String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image, " +
-                "subtopic.id AS subtopic_id, subtopic.name AS subtopic_name, information.id AS information_id," +
-                " information.content, information.type, information.position " +
-                "FROM topic " +
-                "LEFT JOIN subtopic ON topic.id = subtopic.topic " +
-                "LEFT JOIN information ON subtopic.id = information.subtopic " +
-                "WHERE topic.id = ? " +
+        String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image, subtopic.id AS subtopic_id, \n" +
+                "subtopic.name AS subtopic_name, information.id AS information_id,\n" +
+                " information.content, information.type, information.position,\n" +
+                " exam.id AS exam_id\n" +
+                "FROM topic LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
+                "left JOIN exam ON exam.topic = topic.id\n" +
+                "LEFT JOIN information ON subtopic.id = information.subtopic WHERE topic.id = ?\n" +
                 "ORDER BY topic.name ";
 
         Map<Long, TopicResponse> topicMap = new HashMap<>();
@@ -93,6 +93,9 @@ public class Topic{
                 TopicResponse topicDTO = new TopicResponse();
                 topicDTO.setId(topicId);
                 topicDTO.setName(rs.getString("name"));
+                topicDTO.setTime(rs.getString("time"));
+                topicDTO.setLinkImage(rs.getString("link_image"));
+                topicDTO.setExam_id(rs.getLong("exam_id"));
                 topicDTO.setSubtopic(new ArrayList<>());
                 topicMap.put(topicId, topicDTO);
             }
@@ -104,7 +107,6 @@ public class Topic{
             InformationResponse informationDTO = new InformationResponse();
             informationDTO.setInformation_id(rs.getLong("information_id"));
             informationDTO.setContent(rs.getString("content"));
-            informationDTO.setTitle(rs.getString("title"));
             informationDTO.setPosition(rs.getLong("position"));
 
             topicMap.get(topicId).getSubtopic().add(subtopicDTO);

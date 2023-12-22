@@ -6,6 +6,8 @@ import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.repositories.SubtopicRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubtopicRepositoryImp extends SubtopicRepository {
 
@@ -18,5 +20,10 @@ public class SubtopicRepositoryImp extends SubtopicRepository {
     @Override
     public SubtopicEntity save(RegisterSubtopicDto subtopic) {
         return subtopicDatasource.save(subtopic);
+    }
+
+    @Override
+    public List<SubtopicEntity> findTopicsOfTopic(Long id) {
+        return subtopicDatasource.findTopicsOfTopic(id);
     }
 }

@@ -7,6 +7,7 @@ import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.entities.TopicEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -35,5 +36,14 @@ public class SubtopicDatasource extends ambiefac.back.domain.datasources.Subtopi
 
 
 
+    }
+
+    @Override
+    public List<SubtopicEntity> findTopicsOfTopic(Long id) {
+       try {
+           return subtopicRepository.findByTopicId(id);
+       }catch (Exception e){
+           throw new RuntimeException(e.getMessage());
+       }
     }
 }

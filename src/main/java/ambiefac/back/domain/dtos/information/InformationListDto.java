@@ -1,32 +1,19 @@
-package ambiefac.back.data.response;
+package ambiefac.back.domain.dtos.information;
 
-public class InformationResponse {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-    private Long information_id;
+@Data
+public class InformationListDto {
+
+    @NotBlank
     private String content;
-   private String title;
+    private String title;
+    @NotBlank
     private String type;
+    @NotNull
     private Long position;
-
-
-    public InformationResponse(){}
-
-
-    public InformationResponse(Long information_id, String content, String type, Long position,String title) {
-        this.information_id = information_id;
-        this.content = content;
-        this.type = type;
-        this.title = title;
-        this.position = position;
-    }
-
-    public Long getInformation_id() {
-        return information_id;
-    }
-
-    public void setInformation_id(Long information_id) {
-        this.information_id = information_id;
-    }
 
     public String getContent() {
         return content;
@@ -35,7 +22,6 @@ public class InformationResponse {
     public void setContent(String content) {
         this.content = content;
     }
-
 
     public String getTitle() {
         return title;

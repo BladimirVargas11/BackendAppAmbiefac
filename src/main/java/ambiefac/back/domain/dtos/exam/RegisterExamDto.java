@@ -14,7 +14,7 @@ public class RegisterExamDto {
     @NotNull
     private Long idTopic;
     @Valid
-    private List<RegisterQuestionDto> questions = new ArrayList<>();
+    private List<RegisterQuestionDto> questions;
 
     public Long getIdTopic() {
         return idTopic;
