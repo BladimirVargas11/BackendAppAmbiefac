@@ -73,13 +73,12 @@ public class TopicController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTopic(@PathVariable Long id, @RequestBody TopicEntity topic){
-        try{
-           TopicEntity topicEntity = topicRepository.updateTopic(id,topic);
-           return ResponseEntity.status(200).body(topicEntity);
+        Map<String, Object> resultado = new HashMap<>();
+        TopicEntity topicEntity = topicRepository.updateTopic(id,topic);
+        resultado.put("topicId",topic);
+        return ResponseEntity.status(200).body(resultado);
 
-        }catch (RuntimeException e){
-            throw new Error(e.getMessage());
-        }
+
     }
 
     @PostMapping("/saveWitSubtopic")

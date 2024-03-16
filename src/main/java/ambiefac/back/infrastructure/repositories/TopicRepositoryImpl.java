@@ -37,7 +37,7 @@ public class TopicRepositoryImpl extends ambiefac.back.domain.repositories.Topic
 
   @Override
   public TopicEntity updateTopic(Long id, TopicEntity topic) {
-    return null;
+    return topicDatasource.updateTopic(id, topic);
   }
 
   @Override

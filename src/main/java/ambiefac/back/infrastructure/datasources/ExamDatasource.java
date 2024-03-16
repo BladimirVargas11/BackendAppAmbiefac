@@ -122,6 +122,28 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
         }
     }
 
+    @Override
+    public String saveNewQuestions(Long id, RegisterQuestionDto registerQuestionDto) {
+        Optional<ExamEntity> examEntity = examRepository.findById(id);
+
+        if(examEntity.isPresent()){
+            ExamQuestionEntity question = new ExamQuestionEntity();
+          question.setQuestionStatement(registerQuestionDto.getQuestionStatement());
+          questionExamRepository.save(question);
+          for(RegisterAnswerDto answer : registerQuestionDto.getAnswers()){
+              var answerEntity = new QuestionAnswerEntity();
+              answerEntity.setAnswerText(answer.getAnswerText());
+              answerEntity.setCorrect(answer.getCorrect());
+              answerEntity.setQuestion(question);
+              questionAnswerRepository.save(answerEntity);
+          }
+          question.setExam(examEntity.get());
+          return "Se registro con exito";
+        }else{
+            throw new EntityNotFoundException("No existe un examen con este id");
+        }
+    }
+
     public double calculateScore(List<AnswerResponse> listAnswers){
         int answersCorrect = 0;
         for(AnswerResponse answersIdsDto:listAnswers){

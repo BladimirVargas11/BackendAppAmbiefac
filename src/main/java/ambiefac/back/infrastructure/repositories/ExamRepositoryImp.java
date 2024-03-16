@@ -3,10 +3,7 @@ package ambiefac.back.infrastructure.repositories;
 import ambiefac.back.data.response.AnswersResponse;
 import ambiefac.back.data.response.ExamResponse;
 import ambiefac.back.domain.datasources.ExamDatasource;
-import ambiefac.back.domain.dtos.exam.RegisterExamDto;
-import ambiefac.back.domain.dtos.exam.UpdateAnswersListDto;
-import ambiefac.back.domain.dtos.exam.UpdateQuestionsListDto;
-import ambiefac.back.domain.dtos.exam.ValidAnswersDto;
+import ambiefac.back.domain.dtos.exam.*;
 import ambiefac.back.domain.entities.QuestionAnswerEntity;
 import ambiefac.back.domain.repositories.ExamRepository;
 import org.springframework.stereotype.Repository;
@@ -45,5 +42,10 @@ public class ExamRepositoryImp extends ExamRepository {
     @Override
     public ExamResponse findQuestionsWithAnswers(Long id) {
         return examDatasource.findQuestionsWithAnswers(id);
+    }
+
+    @Override
+    public String saveNewQuestions(Long id, RegisterQuestionDto registerQuestionDto) {
+        return examDatasource.saveNewQuestions(id, registerQuestionDto);
     }
 }

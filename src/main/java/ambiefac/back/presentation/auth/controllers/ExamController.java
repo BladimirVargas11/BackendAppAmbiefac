@@ -1,9 +1,6 @@
 package ambiefac.back.presentation.auth.controllers;
 
-import ambiefac.back.domain.dtos.exam.RegisterExamDto;
-import ambiefac.back.domain.dtos.exam.UpdateAnswersListDto;
-import ambiefac.back.domain.dtos.exam.UpdateQuestionsListDto;
-import ambiefac.back.domain.dtos.exam.ValidAnswersDto;
+import ambiefac.back.domain.dtos.exam.*;
 import ambiefac.back.infrastructure.repositories.ExamRepositoryImp;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +40,12 @@ public class ExamController {
     @PostMapping("valid-answers")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
         return ResponseEntity.status(200).body(examRepositoryImp.validAnswers(validAnswersDto));
+    }
+
+    @PostMapping("new-questions/{id}")
+    public ResponseEntity<?> registerNewQuestions(@Valid @PathVariable Long id,
+                                                  @RequestBody RegisterQuestionDto registerQuestionDto){
+        return ResponseEntity.status(200).body(examRepositoryImp.saveNewQuestions(id, registerQuestionDto));
     }
 
 
