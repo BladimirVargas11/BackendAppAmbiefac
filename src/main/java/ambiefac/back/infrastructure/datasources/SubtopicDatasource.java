@@ -3,8 +3,10 @@ package ambiefac.back.infrastructure.datasources;
 import ambiefac.back.data.Subtopic;
 import ambiefac.back.data.TopicSave;
 import ambiefac.back.domain.dtos.subtopic.RegisterSubtopicDto;
+import ambiefac.back.domain.dtos.subtopic.UpdateSubtopicDto;
 import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.entities.TopicEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,6 +39,27 @@ public class SubtopicDatasource extends ambiefac.back.domain.datasources.Subtopi
 
 
     }
+
+    @Override
+    public String update(UpdateSubtopicDto subtopic) {
+        try {
+            System.out.println(subtopic.getId());
+            Optional<SubtopicEntity> subtopicEntity = subtopicRepository.findById(subtopic.getId());
+            subtopicEntity.get().setName(subtopic.getName());
+            subtopicRepository.save(subtopicEntity.get());
+            return "Se actualizo con exito";
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public String delete(Long id) {
+        Optional<SubtopicEntity> subtopicEntity = subtopicRepository.findById(id);
+        subtopicEntity.ifPresent(subtopicRepository::delete);
+        return  "Se elimino con exito";
+    }
+
 
     @Override
     public List<SubtopicEntity> findTopicsOfTopic(Long id) {

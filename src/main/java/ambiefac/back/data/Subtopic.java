@@ -8,4 +8,6 @@ import java.util.List;
 public interface Subtopic extends CrudRepository<SubtopicEntity,Long> {
 
   List<SubtopicEntity> findByTopicId(Long topicId);
+
+
 }

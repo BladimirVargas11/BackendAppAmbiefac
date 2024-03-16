@@ -75,7 +75,7 @@ public class TopicController {
     public ResponseEntity<?> updateTopic(@PathVariable Long id, @RequestBody TopicEntity topic){
         try{
            TopicEntity topicEntity = topicRepository.updateTopic(id,topic);
-           return ResponseEntity.status(201).body(topicEntity);
+           return ResponseEntity.status(200).body(topicEntity);
 
         }catch (RuntimeException e){
             throw new Error(e.getMessage());

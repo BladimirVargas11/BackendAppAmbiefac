@@ -2,6 +2,7 @@ package ambiefac.back.presentation.auth.controllers;
 
 import ambiefac.back.data.TopicSave;
 import ambiefac.back.domain.dtos.subtopic.RegisterSubtopicDto;
+import ambiefac.back.domain.dtos.subtopic.UpdateSubtopicDto;
 import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.repositories.SubtopicRepository;
 import jakarta.validation.Valid;
@@ -36,6 +37,16 @@ public class SubtopicController {
     @GetMapping("byTopic/{id}")
     public ResponseEntity<?> findSubtopicsOfTopic(@PathVariable Long id){
         return ResponseEntity.status(200).body(subtopicRepository.findTopicsOfTopic(id));
+    }
+
+    @PutMapping("update")
+    public ResponseEntity<?> updateSubtopicsOfTopic(@RequestBody UpdateSubtopicDto updateSubtopicDto){
+        return ResponseEntity.status(200).body(subtopicRepository.update(updateSubtopicDto));
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> Delete(@PathVariable Long id){
+        return ResponseEntity.status(200).body(subtopicRepository.delete(id));
     }
 }
 
