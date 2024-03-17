@@ -14,9 +14,7 @@ services:
       - my_network
 
   spring-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: estsban1102/backendappambiefac-spring-app:1.0.3
     container_name: spring-container
     ports:
       - "8080:8080"
