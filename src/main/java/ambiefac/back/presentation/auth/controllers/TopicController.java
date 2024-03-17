@@ -81,6 +81,14 @@ public class TopicController {
 
     }
 
+    @GetMapping("/search")
+    public  ResponseEntity<?> search(@RequestBody String world){
+        Map<String, Object> resultado = new HashMap<>();
+        var list = topicRepository.search(world);
+        resultado.put("list",list);
+        return ResponseEntity.status(200).body(resultado);
+    }
+
     @PostMapping("/saveWitSubtopic")
     public ResponseEntity<?> saveTopic(@RequestBody TopicRequest topicRequest){
        /* TopicEntity topic = convertToTopic(topicRequest);

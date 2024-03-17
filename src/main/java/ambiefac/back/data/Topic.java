@@ -3,6 +3,8 @@ package ambiefac.back.data;
 import ambiefac.back.data.response.InformationResponse;
 import ambiefac.back.data.response.SubtopicResponse;
 import ambiefac.back.data.response.TopicResponse;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -120,6 +122,47 @@ public class Topic{
 
         return resultList.isEmpty() ? null : resultList.get(0);
     }
+
+
+    public List<TopicResponse> findTopicByKeyword( String jsonKeyword) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode keywordNode;
+        String keyword = "";
+
+        try {
+            keywordNode = objectMapper.readTree(jsonKeyword);
+            keyword = keywordNode.get("world").asText();
+        } catch (Exception e) {
+            // Manejar excepción en la conversión del JSON o acceso a la propiedad "world"
+            e.printStackTrace();
+        }
+        String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image " +
+                "FROM topic " +
+                "LEFT JOIN subtopic ON topic.id = subtopic.topic " +
+                "LEFT JOIN information ON subtopic.id = information.subtopic " +
+                "WHERE topic.deleted = false " +
+                "AND topic.name LIKE '%" + keyword + "%' OR subtopic.name LIKE '%" + keyword + "%'";
+
+        System.out.println(sql);
+        System.out.println(keyword);
+
+        List<TopicResponse> topics = jdbcTemplate.query(sql, new RowMapper<TopicResponse>() {
+            @Override
+            public TopicResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+                TopicResponse topicResponse = new TopicResponse();
+                topicResponse.setId(rs.getLong("id"));
+                topicResponse.setName(rs.getString("name"));
+                topicResponse.setTime(rs.getString("time"));
+                topicResponse.setLinkImage(rs.getString("link_image"));
+                return topicResponse;
+            }
+        });
+
+        return topics;
+    }
+
+
 
 
 

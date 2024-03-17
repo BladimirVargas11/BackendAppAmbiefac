@@ -17,4 +17,5 @@ public abstract class TopicDatasource {
     public abstract  TopicEntity updateTopic(Long id,TopicEntity topic);
 
     public abstract String deleteTopic(Long id);
+    public abstract List<TopicResponse> search(String world);
 }

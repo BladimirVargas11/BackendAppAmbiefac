@@ -45,4 +45,9 @@ public class TopicRepositoryImpl extends ambiefac.back.domain.repositories.Topic
     return topicDatasource.deleteTopic(id);
   }
 
+  @Override
+  public List<TopicResponse> search(String world) {
+    return  topicDatasource.search(world);
+  }
+
 }

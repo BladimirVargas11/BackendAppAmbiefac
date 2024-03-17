@@ -14,4 +14,5 @@ public abstract class InformationDatasource {
     public abstract String updateInformation(UpdateListInformationDto updateListInformationDto);
 
     public abstract List<InformationEntity> findInformationOfSubtopic(Long id);
+    public  abstract String deleteInformation(Long id);
 }

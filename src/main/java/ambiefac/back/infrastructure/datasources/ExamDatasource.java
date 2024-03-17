@@ -144,6 +144,47 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
         }
     }
 
+    @Override
+    public String saveNewAnswer(List<RegisterNewAnswerDto> newAnswer) {
+        for (RegisterNewAnswerDto dto : newAnswer) {
+            Optional<ExamQuestionEntity> question = questionExamRepository.findById(dto.getQuestionID());
+            if (question.isPresent()) {
+                var answer = new QuestionAnswerEntity();
+                answer.setQuestion(question.get());
+                answer.setAnswerText(dto.getAnswerText());
+                answer.setCorrect(dto.getCorrect());
+                questionAnswerRepository.save(answer);
+
+            } else {
+                throw new EntityNotFoundException();
+            }
+
+        }
+        return "Se registro exitosamente";
+    }
+
+    @Override
+    public String Deletequestion(Long id) {
+        Optional<ExamQuestionEntity> question = questionExamRepository.findById(id);
+        if(question.isPresent()){
+            questionExamRepository.delete(question.get());
+            return "Se elimino con exito";
+        }else {
+            throw new EntityNotFoundException("No hay un registro con este id");
+        }
+    }
+
+    @Override
+    public String deleteAnswer(Long id) {
+        Optional<QuestionAnswerEntity> answer = questionAnswerRepository.findById(id);
+        if(answer.isPresent()){
+            questionAnswerRepository.delete(answer.get());
+            return "Se elimino con exito";
+        }else {
+            throw new EntityNotFoundException("No hay un registro con este id");
+        }
+    }
+
     public double calculateScore(List<AnswerResponse> listAnswers){
         int answersCorrect = 0;
         for(AnswerResponse answersIdsDto:listAnswers){

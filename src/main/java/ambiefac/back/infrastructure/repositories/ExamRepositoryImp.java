@@ -48,4 +48,19 @@ public class ExamRepositoryImp extends ExamRepository {
     public String saveNewQuestions(Long id, RegisterQuestionDto registerQuestionDto) {
         return examDatasource.saveNewQuestions(id, registerQuestionDto);
     }
+
+    @Override
+    public String saveNewAnswer(List<RegisterNewAnswerDto> newAnswer) {
+        return  examDatasource.saveNewAnswer(newAnswer);
+    }
+
+    @Override
+    public String Deletequestion(Long id) {
+        return examDatasource.Deletequestion(id);
+    }
+
+    @Override
+    public String deleteAnswer(Long id) {
+        return  examDatasource.deleteAnswer(id);
+    }
 }

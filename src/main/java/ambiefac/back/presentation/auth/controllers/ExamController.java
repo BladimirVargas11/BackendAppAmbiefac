@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/exam")
 @Validated
@@ -46,6 +48,21 @@ public class ExamController {
     public ResponseEntity<?> registerNewQuestions(@Valid @PathVariable Long id,
                                                   @RequestBody RegisterQuestionDto registerQuestionDto){
         return ResponseEntity.status(200).body(examRepositoryImp.saveNewQuestions(id, registerQuestionDto));
+    }
+
+    @PostMapping("new-answers")
+    public ResponseEntity<?> registerNewAnswers(@RequestBody List<RegisterNewAnswerDto> registerAnswersDto){
+        return ResponseEntity.status(200).body(examRepositoryImp.saveNewAnswer(registerAnswersDto));
+    }
+
+    @DeleteMapping("delete-question/{id}")
+    public ResponseEntity<?> DeleteQuestion(@PathVariable Long id){
+        return ResponseEntity.status(200).body(examRepositoryImp.Deletequestion(id));
+    }
+
+    @DeleteMapping("delete-answer/{id}")
+    public ResponseEntity<?> DeleteAnswer(@PathVariable Long id){
+        return ResponseEntity.status(200).body(examRepositoryImp.deleteAnswer(id));
     }
 
 

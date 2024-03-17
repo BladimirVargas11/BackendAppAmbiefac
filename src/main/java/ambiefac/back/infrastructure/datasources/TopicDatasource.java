@@ -89,4 +89,10 @@ public class TopicDatasource extends ambiefac.back.domain.datasources.TopicDatas
             throw new EntityNotFoundException();
         }
     }
+
+    @Override
+    public List<TopicResponse> search(String world) {
+
+        return topic.findTopicByKeyword(world);
+    }
 }

@@ -40,4 +40,9 @@ public class InformationController {
         return ResponseEntity.status(200).body(informationRepository.updateInformation(updateListInformationDto));
 
     }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteInformation(@PathVariable Long id){
+        return ResponseEntity.status(200).body(informationRepository.deleteInformation(id));
+    }
 }

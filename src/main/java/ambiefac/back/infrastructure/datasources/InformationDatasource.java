@@ -68,6 +68,17 @@ public class InformationDatasource extends ambiefac.back.domain.datasources.Info
         }
     }
 
+    @Override
+    public String deleteInformation(Long id) {
+        Optional<InformationEntity> informationEntity = informationRepository.findById(id);
+        if(informationEntity.isPresent()){
+            informationRepository.delete(informationEntity.get());
+            return "Se elimino con exito";
+        }else{
+            throw  new EntityNotFoundException("No hay un registro con este id");
+        }
+    }
+
     private InformationEntity convertDto(InformationListDto informationListDto){
 
             InformationEntity informationEntity = new InformationEntity();

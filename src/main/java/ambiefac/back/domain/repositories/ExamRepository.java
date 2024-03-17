@@ -15,4 +15,7 @@ public abstract class ExamRepository {
     public abstract AnswersResponse validAnswers(ValidAnswersDto validAnswersDto);
     public abstract ExamResponse findQuestionsWithAnswers(Long id);
     public abstract String saveNewQuestions(Long id, RegisterQuestionDto registerQuestionDto);
+    public abstract String saveNewAnswer(List<RegisterNewAnswerDto> newAnswer);
+    public abstract String Deletequestion(Long id);
+    public abstract String deleteAnswer(Long id);
 }

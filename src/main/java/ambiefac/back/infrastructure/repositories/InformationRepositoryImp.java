@@ -34,4 +34,9 @@ public class InformationRepositoryImp extends InformationRepository {
     public List<InformationEntity> findInformationOfSubtopic(Long id) {
         return informationDatasource.findInformationOfSubtopic(id);
     }
+
+    @Override
+    public String deleteInformation(Long id) {
+        return  informationDatasource.deleteInformation(id);
+    }
 }
