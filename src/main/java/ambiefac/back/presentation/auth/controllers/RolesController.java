@@ -3,6 +3,7 @@ package ambiefac.back.presentation.auth.controllers;
 import ambiefac.back.data.IRoles;
 import ambiefac.back.domain.entities.RoleEntity;
 
+import ambiefac.back.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,8 @@ public class RolesController {
     @GetMapping("/all")
     public ResponseEntity<?> getRoles(){
         try{
-           return  ResponseEntity.status(200).body(roleService.findAll());
+            Response<?> response = new Response<>(true,"Consulta exitosa",roleService.findAll());
+           return  ResponseEntity.status(200).body(response);
         }catch (Exception e){
             throw new  Error(e.getMessage());
         }
@@ -40,7 +42,8 @@ public class RolesController {
     @PostMapping("/save")
    
     public ResponseEntity<?> save(@RequestBody @Valid RoleEntity role) {
-		return ResponseEntity.status(200).body(roleService.save(role));
+        Response<?> response = new Response<>(true,"Registro exitoso",roleService.save(role) );
+		return ResponseEntity.status(200).body(response);
 	}
 
 

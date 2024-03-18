@@ -2,6 +2,7 @@ package ambiefac.back.presentation.auth.controllers;
 
 import ambiefac.back.domain.dtos.exam.*;
 import ambiefac.back.infrastructure.repositories.ExamRepositoryImp;
+import ambiefac.back.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,47 +23,57 @@ public class ExamController {
 
     @GetMapping("questions/{id}")
     public ResponseEntity<?> findQuestionsWithAnswers(@PathVariable Long id){
-        return ResponseEntity.status(200).body(examRepositoryImp.findQuestionsWithAnswers(id));
+        var result = examRepositoryImp.findQuestionsWithAnswers(id);
+        Response<?> response = new Response<>(true,"Consulta exitosa", result);
+        return ResponseEntity.status(200).body(response);
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody RegisterExamDto registerExamDto){
-        return ResponseEntity.status(201).body(examRepositoryImp.save(registerExamDto));
+        Response<?> response = new Response<>(true,"Registro exitoso", examRepositoryImp.save(registerExamDto));
+        return ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/update-questions")
     public ResponseEntity<?> updateQuestions(@Valid @RequestBody UpdateQuestionsListDto updateQuestionsListDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.updateQuestions(updateQuestionsListDto));
+        Response<?> response = new Response<>(true,"Actualizacion exitosa", examRepositoryImp.updateQuestions(updateQuestionsListDto));
+        return ResponseEntity.status(200).body(response);
     }
 
     @PutMapping("/update-answers")
     public ResponseEntity<?> updateAnswers(@Valid @RequestBody UpdateAnswersListDto updateAnswersListDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.updateAnswers(updateAnswersListDto));
+        Response<?> response = new Response<>(true,"Actualizacion exitosa", examRepositoryImp.updateAnswers(updateAnswersListDto));
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping("valid-answers")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.validAnswers(validAnswersDto));
+        Response<?> response = new Response<>(true,"Validacion exitosa", examRepositoryImp.validAnswers(validAnswersDto));
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping("new-questions/{id}")
     public ResponseEntity<?> registerNewQuestions(@Valid @PathVariable Long id,
                                                   @RequestBody RegisterQuestionDto registerQuestionDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.saveNewQuestions(id, registerQuestionDto));
+        Response<?> response = new Response<>(true,"Registro exitoso", examRepositoryImp.saveNewQuestions(id, registerQuestionDto));
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping("new-answers")
     public ResponseEntity<?> registerNewAnswers(@RequestBody List<RegisterNewAnswerDto> registerAnswersDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.saveNewAnswer(registerAnswersDto));
+        Response<?> response = new Response<>(true,"Registro exitoso", examRepositoryImp.saveNewAnswer(registerAnswersDto));
+        return ResponseEntity.status(200).body(response);
     }
 
     @DeleteMapping("delete-question/{id}")
     public ResponseEntity<?> DeleteQuestion(@PathVariable Long id){
-        return ResponseEntity.status(200).body(examRepositoryImp.Deletequestion(id));
+        Response<?> response = new Response<>(true,"Eliminacion exitosa", examRepositoryImp.Deletequestion(id));
+        return ResponseEntity.status(200).body(response);
     }
 
     @DeleteMapping("delete-answer/{id}")
     public ResponseEntity<?> DeleteAnswer(@PathVariable Long id){
-        return ResponseEntity.status(200).body(examRepositoryImp.deleteAnswer(id));
+        Response<?> response = new Response<>(true,"Eliminacion exitosa", examRepositoryImp.deleteAnswer(id));
+        return ResponseEntity.status(200).body(response);
     }
 
 
