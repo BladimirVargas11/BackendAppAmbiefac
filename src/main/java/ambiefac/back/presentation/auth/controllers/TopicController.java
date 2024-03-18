@@ -43,6 +43,7 @@ public class TopicController {
     public ResponseEntity<?> findTopics(){
         Response<?> response = new Response<>(true,"Consulta exitosa", this.topicRepository.findTopics());
         return ResponseEntity.status(200).body(response);
+
     }
 
     @GetMapping("/{cursoId}")
