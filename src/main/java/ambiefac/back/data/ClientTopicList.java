@@ -1,6 +1,10 @@
 package ambiefac.back.data;
 
+import ambiefac.back.data.response.ClientTopicListResponse;
 import ambiefac.back.data.response.ClientTopicResponse;
+import ambiefac.back.data.response.TopicListResponse;
+import ambiefac.back.data.response.TopicResponse;
+import ambiefac.back.domain.entities.TopicEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,6 +37,34 @@ public class ClientTopicList {
             clientCourseDTO.setClientId(rs.getLong("client_id"));
             clientCourseDTO.setRegistrationId(rs.getLong("registration_id"));
             clientCourseDTO.setRegistrationDate(rs.getDate("registration_date"));
+
+            return clientCourseDTO;
+        });
+    }
+
+    public ClientTopicListResponse getClientCourse(Long clientId, Long topicId) {
+        String sql = "SELECT client_topic.registration_id, client_topic.registration_date, " +
+                "client_topic.score, client_topic.completed, " +
+                "topic.id AS topic_id, topic.name, topic.time, topic.description, topic.link_image " +
+                "FROM client_topic " +
+                "LEFT JOIN topic ON topic.id = client_topic.topic_id " +
+                "WHERE client_topic.client_id = ? AND client_topic.topic_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{clientId, topicId}, (rs, rowNum) -> {
+            ClientTopicListResponse clientCourseDTO = new ClientTopicListResponse();
+            clientCourseDTO.setRegistrationId(rs.getLong("registration_id"));
+            clientCourseDTO.setRegistrationDate(rs.getDate("registration_date"));
+            clientCourseDTO.setScore(rs.getDouble("score"));
+            clientCourseDTO.setCompleted(rs.getBoolean("completed"));
+
+            TopicListResponse topic = new TopicListResponse();
+            topic.setId(rs.getLong("topic_id"));
+            topic.setName(rs.getString("name"));
+            topic.setTime(rs.getString("time"));
+            topic.setDescription(rs.getString("description"));
+            topic.setLinkImage(rs.getString("link_image"));
+
+            clientCourseDTO.setTopic(topic);
 
             return clientCourseDTO;
         });

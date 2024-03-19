@@ -5,10 +5,7 @@ import ambiefac.back.data.response.AnswerResponse;
 import ambiefac.back.data.response.AnswersResponse;
 import ambiefac.back.data.response.ExamResponse;
 import ambiefac.back.domain.dtos.exam.*;
-import ambiefac.back.domain.entities.ExamEntity;
-import ambiefac.back.domain.entities.ExamQuestionEntity;
-import ambiefac.back.domain.entities.QuestionAnswerEntity;
-import ambiefac.back.domain.entities.TopicEntity;
+import ambiefac.back.domain.entities.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +21,16 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     private final QuestionAnswer questionAnswerRepository;
     private final TopicSave topicSave;
     private final ExamQuery examQuery;
+    private  final  ClientTopic clientTopixRepository;
 
-    public ExamDatasource(Exam examRepository, QuestionExam questionExamRepository, QuestionAnswer questionAnswerRepository, TopicSave topicSave, ExamQuery examQuery) {
+    public ExamDatasource(Exam examRepository, QuestionExam questionExamRepository, QuestionAnswer questionAnswerRepository, TopicSave topicSave, ExamQuery examQuery,
+                          ClientTopic clientTopic) {
         this.examRepository = examRepository;
         this.questionExamRepository = questionExamRepository;
         this.questionAnswerRepository = questionAnswerRepository;
         this.topicSave = topicSave;
         this.examQuery = examQuery;
+        this.clientTopixRepository = clientTopic;
     }
 
     @Override
@@ -109,6 +109,15 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
         AnswersResponse answersResponse = new AnswersResponse();
         answersResponse.setAnswers(listAnswers);
         answersResponse.setScore(calculateScore(listAnswers));
+        var validExist = clientTopixRepository.findByClientIdAndTopicId(validAnswersDto.getIdClient(), validAnswersDto.getIdTopic());
+        if(validExist.isPresent()){
+            validExist.get().setScore(calculateScore(listAnswers));
+            clientTopixRepository.save(validExist.get());
+        }else {
+            throw new EntityNotFoundException("No existe un registro de examen con estos id");
+        }
+
+
         return answersResponse;
 
     }
@@ -185,15 +194,16 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
         }
     }
 
-    public double calculateScore(List<AnswerResponse> listAnswers){
+    public int calculateScore(List<AnswerResponse> listAnswers){
         int answersCorrect = 0;
-        for(AnswerResponse answersIdsDto:listAnswers){
+        for(AnswerResponse answersIdsDto : listAnswers){
             if(answersIdsDto.getCorrect()){
                 answersCorrect++;
             }
         }
-        double total = ((double) answersCorrect/listAnswers.size()) *100;
+        double total = ((double) answersCorrect / listAnswers.size()) * 100;
 
-        return total * 100;
+        return Math.round((float)total);
     }
+
 }

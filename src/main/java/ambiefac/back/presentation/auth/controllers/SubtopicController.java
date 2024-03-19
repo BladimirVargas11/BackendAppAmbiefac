@@ -44,7 +44,7 @@ public class SubtopicController {
 
     @PutMapping("update")
     public ResponseEntity<?> updateSubtopicsOfTopic(@RequestBody UpdateSubtopicDto updateSubtopicDto){
-        Response<?> response = new Response<>(true,"Actualizacion exitosa", subtopicRepository.update(updateSubtopicDto));
+        Response<?> response = new Response<>(true, subtopicRepository.update(updateSubtopicDto),null);
         return ResponseEntity.status(200).body(response);
     }
 
