@@ -51,9 +51,8 @@ public class AuthController {
         public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) {
 
             try {
-                var result = new LoginUseCase(this.authRepository).execute(loginUserDto);
-                Response<?> response = new Response<>(true,"Login exitoso", result);
-                return ResponseEntity.status(200).body(response);
+
+                return ResponseEntity.status(200).body(new LoginUseCase(this.authRepository).execute(loginUserDto));
 
             } catch (Exception e) {
                 CustomError error = new CustomError(401,e.getMessage());
