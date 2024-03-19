@@ -57,7 +57,7 @@ public class ExamController {
     }
 
     //blvargas
-    @PostMapping("valid-answers/{id}")
+    @PostMapping("valid-answers")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
 
         Map<String, Object> resultado = new HashMap<>();

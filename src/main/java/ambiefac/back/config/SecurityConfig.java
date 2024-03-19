@@ -1,6 +1,7 @@
 package ambiefac.back.config;
 
 import ambiefac.back.config.jwt.JWTAuthenticationFilter;
+import io.swagger.models.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/topic/**").permitAll()
+                        .requestMatchers("/topic/search").permitAll()
                         .requestMatchers("/v1/authenticate","/v3/api-docs/**",
                                 "/swagger-ui/**","/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
