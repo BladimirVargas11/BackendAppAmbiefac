@@ -51,6 +51,7 @@ public class ExamController {
         return ResponseEntity.status(200).body(examRepositoryImp.updateAnswers(updateAnswersListDto));
     }
 
+    //blvargas
     @PostMapping("valid-answers/{id}")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
         Map<String, Object> resultado = new HashMap<>();
