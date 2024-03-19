@@ -103,7 +103,7 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
               answerResponse.setCorrect(answer.get().getCorrect());
               listAnswers.add(answerResponse);
             }else{
-                throw new EntityNotFoundException("No existe una respuesta con este id");
+                throw new EntityNotFoundException("No existe una respuesta con este id ");
             }
         }
         AnswersResponse answersResponse = new AnswersResponse();
