@@ -33,6 +33,7 @@ public class TopicController {
     private final TopicRepository topicRepository;
     private final Subtopic subtopicRepository;
     private final Information informationRepository;
+
     public TopicController(TopicRepository topicRepository, Subtopic subtopicRepository, Information informationRepository) {
         this.topicRepository = topicRepository;
         this.subtopicRepository = subtopicRepository;
@@ -57,7 +58,7 @@ public class TopicController {
 
 
     @GetMapping("/{cursoId}")
-    public ResponseEntity<?> findTopic(@PathVariable Long cursoId){
+    public ResponseEntity<?> findTopic(@PathVariable Long cursoId) {
         Map<String, Object> resultado = new HashMap<>();
         try {
             var list = topicRepository.findTopic(cursoId);
@@ -73,50 +74,54 @@ public class TopicController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@Valid @RequestBody  RegisterTopicDto topicEntity, BindingResult bindingResult){
+    public ResponseEntity<?> save(@Valid @RequestBody RegisterTopicDto topicEntity, BindingResult bindingResult) {
 
-            Map<String, Object> resultado = new HashMap<>();
-            TopicEntity topic = topicRepository.save(topicEntity);
-            resultado.put("topicId",topic.getId());
-        Response<?> response = new Response<>(true,"Registro exitoso", resultado);
-            return ResponseEntity.status(200).body(response);
+        Map<String, Object> resultado = new HashMap<>();
+        TopicEntity topic = topicRepository.save(topicEntity);
+        resultado.put("topicId", topic.getId());
+        Response<?> response = new Response<>(true, "Registro exitoso", resultado);
+        return ResponseEntity.status(200).body(response);
 
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
-        try{
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
             Map<String, Object> resultado = new HashMap<>();
-            resultado.put("message",topicRepository.deleteTopic(id));
-            Response<?> response = new Response<>(true,"Eliminacion exitosa", resultado);
+            resultado.put("message", topicRepository.deleteTopic(id));
+            Response<?> response = new Response<>(true, "Eliminacion exitosa", resultado);
             return ResponseEntity.status(200).body(response);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Error(e.getMessage());
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateTopic(@PathVariable Long id, @RequestBody TopicEntity topic){
+    public ResponseEntity<?> updateTopic(@PathVariable Long id, @RequestBody TopicEntity topic) {
         Map<String, Object> resultado = new HashMap<>();
-        TopicEntity topicEntity = topicRepository.updateTopic(id,topic);
-        resultado.put("topicId",topic);
-        Response<?> response = new Response<>(true,"Actualizacion exitosa", resultado);
+        TopicEntity topicEntity = topicRepository.updateTopic(id, topic);
+        resultado.put("topicId", topic);
+        Response<?> response = new Response<>(true, "Actualizacion exitosa", resultado);
         return ResponseEntity.status(200).body(response);
 
 
     }
 
-    @GetMapping("/search")
-    public  ResponseEntity<?> search(@RequestBody String world){
-        Map<String, Object> resultado = new HashMap<>();
-        var list = topicRepository.search(world);
-        resultado.put("list",list);
-        Response<?> response = new Response<>(true,"Consulta exitosa", resultado);
-        return ResponseEntity.status(200).body(response);
+    @GetMapping("/search/{word}")
+    public ResponseEntity<?> search(@PathVariable String word) {
+        try {
+            Map<String, Object> resultado = new HashMap<>();
+            var list = topicRepository.search(word);
+            resultado.put("list", list);
+            Response<?> response = new Response<>(true, "Consulta exitosa", resultado);
+            return ResponseEntity.status(200).body(response);
+        } catch (Exception e) {
+            throw new Error(e.getMessage());
+        }
     }
 
     @PostMapping("/saveWitSubtopic")
-    public ResponseEntity<?> saveTopic(@RequestBody TopicRequest topicRequest){
+    public ResponseEntity<?> saveTopic(@RequestBody TopicRequest topicRequest) {
        /* TopicEntity topic = convertToTopic(topicRequest);
         this.topicRepository.saveWithSubtopic(topic);
         for(SubtopicRequest subtopicRequest:topicRequest.getSubtopics()){
@@ -145,11 +150,6 @@ public class TopicController {
     */
         return null;
     }
-
-
-
-
-
 
 
 }

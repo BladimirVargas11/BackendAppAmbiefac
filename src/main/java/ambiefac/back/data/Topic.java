@@ -143,28 +143,14 @@ public class Topic {
     }
 
 
-    public List<TopicResponse> findTopicByKeyword(String jsonKeyword) {
+    public List<TopicResponse> findTopicByKeyword(String keyword) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode keywordNode;
-        String keyword = "";
-
-        try {
-            keywordNode = objectMapper.readTree(jsonKeyword);
-            keyword = keywordNode.get("world").asText();
-        } catch (Exception e) {
-            // Manejar excepción en la conversión del JSON o acceso a la propiedad "world"
-            e.printStackTrace();
-        }
         String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image " +
                 "FROM topic " +
                 "LEFT JOIN subtopic ON topic.id = subtopic.topic " +
                 "LEFT JOIN information ON subtopic.id = information.subtopic " +
                 "WHERE topic.deleted = false " +
                 "AND topic.name LIKE '%" + keyword + "%' OR subtopic.name LIKE '%" + keyword + "%'";
-
-        System.out.println(sql);
-        System.out.println(keyword);
 
         List<TopicResponse> topics = jdbcTemplate.query(sql, new RowMapper<TopicResponse>() {
             @Override
