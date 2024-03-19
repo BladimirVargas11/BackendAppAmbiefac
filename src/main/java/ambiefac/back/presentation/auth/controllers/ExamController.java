@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/exam")
@@ -23,9 +25,18 @@ public class ExamController {
 
     @GetMapping("questions/{id}")
     public ResponseEntity<?> findQuestionsWithAnswers(@PathVariable Long id){
-        var result = examRepositoryImp.findQuestionsWithAnswers(id);
-        Response<?> response = new Response<>(true,"Consulta exitosa", result);
-        return ResponseEntity.status(200).body(response);
+
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", examRepositoryImp.findQuestionsWithAnswers(id));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
+
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody RegisterExamDto registerExamDto){
@@ -45,10 +56,21 @@ public class ExamController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PostMapping("valid-answers")
+    @PostMapping("valid-answers/{id}")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
-        Response<?> response = new Response<>(true,"Validacion exitosa", examRepositoryImp.validAnswers(validAnswersDto));
-        return ResponseEntity.status(200).body(response);
+
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", examRepositoryImp.validAnswers(validAnswersDto));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
+
+
     }
 
     @PostMapping("new-questions/{id}")

@@ -9,6 +9,10 @@ public class ClientTopicResponse {
     private Long clientId;
     private Long registrationId;
     private Date registrationDate;
+    private Long score;
+
+    private String linkImage;
+
 
     public Long getTopicId() {
         return topicId;
@@ -18,12 +22,28 @@ public class ClientTopicResponse {
         this.topicId = topicId;
     }
 
+    public Long getScore() {
+        return score;
+    }
+
+    public void setScore(Long score) {
+        this.score = score;
+    }
+
     public String getTopicName() {
         return topicName;
     }
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;
+    }
+
+    public String getLinkImage() {
+        return linkImage;
+    }
+
+    public void setLinkImage(String linkImage) {
+        this.linkImage = linkImage;
     }
 
     public String getClientFullName() {

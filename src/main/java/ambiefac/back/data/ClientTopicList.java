@@ -19,7 +19,7 @@ public class ClientTopicList {
 
     public List<ClientTopicResponse> getClientCourses(Long clientId) {
         String sql = "SELECT topic.id AS topic_id, topic.name, client.full_name, client.id AS client_id, " +
-                "client_topic.registration_id, client_topic.registration_date " +
+                "client_topic.registration_id, client_topic.registration_date, topic.link_image, client_topic.score " +
                 "FROM client_topic " +
                 "LEFT JOIN topic ON topic.id = client_topic.topic " +
                 "LEFT JOIN client ON client.id = client_topic.client " +
@@ -33,6 +33,8 @@ public class ClientTopicList {
             clientCourseDTO.setClientId(rs.getLong("client_id"));
             clientCourseDTO.setRegistrationId(rs.getLong("registration_id"));
             clientCourseDTO.setRegistrationDate(rs.getDate("registration_date"));
+            clientCourseDTO.setLinkImage(rs.getString("link_image"));
+            clientCourseDTO.setScore(rs.getLong("score"));
 
             return clientCourseDTO;
         });
