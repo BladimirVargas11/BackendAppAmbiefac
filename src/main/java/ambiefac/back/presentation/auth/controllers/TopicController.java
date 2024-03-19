@@ -39,15 +39,34 @@ public class TopicController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> findTopics(){
-
-        return ResponseEntity.status(200).body(this.topicRepository.findTopics());
+    public ResponseEntity<Map<String, Object>> findTopics() {
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            var list = this.topicRepository.findTopics();
+            resultado.put("data", list);
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
     }
+
 
     @GetMapping("/{cursoId}")
     public ResponseEntity<?> findTopic(@PathVariable Long cursoId){
-        TopicResponse result = this.topicRepository.findTopic(cursoId);
-        return  ResponseEntity.status(200).body(result);
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            var list = topicRepository.findTopic(cursoId);
+            resultado.put("data", list);
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
     }
 
     @PostMapping("/save")

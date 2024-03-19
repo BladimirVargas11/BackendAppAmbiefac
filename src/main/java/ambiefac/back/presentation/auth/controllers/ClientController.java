@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/client")
 public class ClientController {
@@ -22,11 +25,16 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDetailsUser(@PathVariable Long id){
-       try{
-           return ResponseEntity.status(HttpStatus.OK).body(this.clientRepository.findById(id));
-       }catch (Exception e){
-           return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-       }
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", clientRepository.findById(id));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
     }
 
     @PutMapping("/update/{id}")

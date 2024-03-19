@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/exam")
@@ -22,7 +24,17 @@ public class ExamController {
 
     @GetMapping("questions/{id}")
     public ResponseEntity<?> findQuestionsWithAnswers(@PathVariable Long id){
-        return ResponseEntity.status(200).body(examRepositoryImp.findQuestionsWithAnswers(id));
+
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", examRepositoryImp.findQuestionsWithAnswers(id));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody RegisterExamDto registerExamDto){
@@ -39,9 +51,19 @@ public class ExamController {
         return ResponseEntity.status(200).body(examRepositoryImp.updateAnswers(updateAnswersListDto));
     }
 
-    @PostMapping("valid-answers")
+    @PostMapping("valid-answers/{id}")
     public ResponseEntity<?> validAnswers(@Valid @RequestBody ValidAnswersDto validAnswersDto){
-        return ResponseEntity.status(200).body(examRepositoryImp.validAnswers(validAnswersDto));
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", examRepositoryImp.validAnswers(validAnswersDto));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
+
     }
 
     @PostMapping("new-questions/{id}")

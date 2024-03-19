@@ -18,7 +18,7 @@ public class ExamQuery {
 
     public ExamResponse findExamWithQuestions(@Param("id") Long id) {
         String sql = "SELECT exam.id as exam_id, exam.exam_date, exam_question.id as question_id, exam_question.question_statement, \n" +
-                "question_answer.answer_text, question_answer.is_correct\n" +
+                "question_answer.answer_text, question_answer.id, question_answer.is_correct\n" +
                 "FROM exam LEFT JOIN exam_question ON exam.id = exam_question.exam\n" +
                 "LEFT JOIN question_answer ON question_answer.question = exam_question.id\n" +
                 "WHERE exam.id = ?\n";
@@ -50,6 +50,7 @@ public class ExamQuery {
             }
 
             AnswerQuestionResponse answerQuestionResponse = new AnswerQuestionResponse();
+            answerQuestionResponse.setId(rs.getLong("id"));
             answerQuestionResponse.setAnswerText(rs.getString("answer_text"));
             answerQuestionResponse.setCorrect(rs.getBoolean("is_correct"));
 

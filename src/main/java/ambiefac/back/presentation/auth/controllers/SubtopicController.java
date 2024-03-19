@@ -27,25 +27,36 @@ public class SubtopicController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveSubtopic(@Valid  @RequestBody RegisterSubtopicDto subtopic){
+    public ResponseEntity<?> saveSubtopic(@Valid @RequestBody RegisterSubtopicDto subtopic) {
         Map<String, Object> resultado = new HashMap<>();
-       SubtopicEntity subtopicEntity = subtopicRepository.save(subtopic);
-        resultado.put("topicId",subtopicEntity.getId());
+        SubtopicEntity subtopicEntity = subtopicRepository.save(subtopic);
+        resultado.put("topicId", subtopicEntity.getId());
         return ResponseEntity.status(200).body(resultado);
     }
 
     @GetMapping("byTopic/{id}")
-    public ResponseEntity<?> findSubtopicsOfTopic(@PathVariable Long id){
-        return ResponseEntity.status(200).body(subtopicRepository.findTopicsOfTopic(id));
+    public ResponseEntity<?> findSubtopicsOfTopic(@PathVariable Long id) {
+
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", subtopicRepository.findTopicsOfTopic(id));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
+
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateSubtopicsOfTopic(@RequestBody UpdateSubtopicDto updateSubtopicDto){
+    public ResponseEntity<?> updateSubtopicsOfTopic(@RequestBody UpdateSubtopicDto updateSubtopicDto) {
         return ResponseEntity.status(200).body(subtopicRepository.update(updateSubtopicDto));
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> Delete(@PathVariable Long id){
+    public ResponseEntity<?> Delete(@PathVariable Long id) {
         return ResponseEntity.status(200).body(subtopicRepository.delete(id));
     }
 }
