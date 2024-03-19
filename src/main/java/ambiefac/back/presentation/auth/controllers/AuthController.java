@@ -10,6 +10,7 @@ import ambiefac.back.domain.repositories.AuthRepository;
 import ambiefac.back.domain.useCases.auth.LoginUseCase;
 import ambiefac.back.domain.useCases.auth.RegisterUseCase;
 import ambiefac.back.presentation.auth.services.AuthService;
+import ambiefac.back.util.Response;
 import com.sun.jdi.request.InvalidRequestStateException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -35,14 +36,14 @@ public class AuthController {
         @PostMapping("/register")
         public ResponseEntity<?> register(@Valid  @RequestBody RegisterUserDto registerUserDto) {
             try {
-                return ResponseEntity.status(HttpStatus.OK).body(new RegisterUseCase(this.authRepository).execute(registerUserDto));
+                var result = new RegisterUseCase(this.authRepository).execute(registerUserDto);
+                Response<?> response = new Response<>(true,"Registro exitoso", result);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
 
-            } catch ( UsernameAlreadyExistsException | EmailAlreadyExists e) {
+            } catch (Exception e){
                 CustomError error = new CustomError(400,e.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-            }catch (Exception e){
-                CustomError error = new CustomError(400,e.getMessage());
-                return  ResponseEntity.status(error.getStatus()).body(error);
+                Response<?> response = new Response<>(false,error.getMessage(), error);
+                return ResponseEntity.status(error.getStatus()).body(response);
             }
         }
 
@@ -50,11 +51,14 @@ public class AuthController {
         public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto loginUserDto) {
 
             try {
-                return ResponseEntity.status(HttpStatus.OK).body(new LoginUseCase(this.authRepository).execute(loginUserDto));
+                var result = new LoginUseCase(this.authRepository).execute(loginUserDto);
+                Response<?> response = new Response<>(true,"Login exitoso", result);
+                return ResponseEntity.status(200).body(response);
 
             } catch (Exception e) {
                 CustomError error = new CustomError(401,e.getMessage());
-                return ResponseEntity.status(error.getStatus()).body(error);
+                Response<?> response = new Response<>(false,error.getMessage(), error);
+                return ResponseEntity.status(error.getStatus()).body(response);
             }
         }
 

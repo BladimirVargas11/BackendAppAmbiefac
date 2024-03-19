@@ -11,6 +11,7 @@ import ambiefac.back.domain.entities.*;
 
 import ambiefac.back.domain.repositories.TopicRepository;
 
+import ambiefac.back.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,7 @@ public class TopicController {
             resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
         }
         return ResponseEntity.ok().body(resultado);
+
     }
 
 
@@ -67,6 +69,7 @@ public class TopicController {
             resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
         }
         return ResponseEntity.ok().body(resultado);
+
     }
 
     @PostMapping("/save")
@@ -75,7 +78,8 @@ public class TopicController {
             Map<String, Object> resultado = new HashMap<>();
             TopicEntity topic = topicRepository.save(topicEntity);
             resultado.put("topicId",topic.getId());
-            return ResponseEntity.status(200).body(resultado);
+        Response<?> response = new Response<>(true,"Registro exitoso", resultado);
+            return ResponseEntity.status(200).body(response);
 
     }
 
@@ -84,7 +88,8 @@ public class TopicController {
         try{
             Map<String, Object> resultado = new HashMap<>();
             resultado.put("message",topicRepository.deleteTopic(id));
-            return ResponseEntity.status(200).body(resultado);
+            Response<?> response = new Response<>(true,"Eliminacion exitosa", resultado);
+            return ResponseEntity.status(200).body(response);
         }catch (Exception e){
             throw new Error(e.getMessage());
         }
@@ -95,7 +100,8 @@ public class TopicController {
         Map<String, Object> resultado = new HashMap<>();
         TopicEntity topicEntity = topicRepository.updateTopic(id,topic);
         resultado.put("topicId",topic);
-        return ResponseEntity.status(200).body(resultado);
+        Response<?> response = new Response<>(true,"Actualizacion exitosa", resultado);
+        return ResponseEntity.status(200).body(response);
 
 
     }
@@ -105,7 +111,8 @@ public class TopicController {
         Map<String, Object> resultado = new HashMap<>();
         var list = topicRepository.search(world);
         resultado.put("list",list);
-        return ResponseEntity.status(200).body(resultado);
+        Response<?> response = new Response<>(true,"Consulta exitosa", resultado);
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping("/saveWitSubtopic")

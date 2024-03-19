@@ -5,6 +5,7 @@ import ambiefac.back.domain.dtos.subtopic.RegisterSubtopicDto;
 import ambiefac.back.domain.dtos.subtopic.UpdateSubtopicDto;
 import ambiefac.back.domain.entities.SubtopicEntity;
 import ambiefac.back.domain.repositories.SubtopicRepository;
+import ambiefac.back.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -58,6 +59,7 @@ public class SubtopicController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> Delete(@PathVariable Long id) {
         return ResponseEntity.status(200).body(subtopicRepository.delete(id));
+
     }
 }
 

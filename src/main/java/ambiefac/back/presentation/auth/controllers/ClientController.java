@@ -4,6 +4,7 @@ import ambiefac.back.data.IClient;
 import ambiefac.back.domain.dtos.auth.UpdateClientDto;
 import ambiefac.back.domain.entities.ClientEntity;
 import ambiefac.back.domain.repositories.ClientRepository;
+import ambiefac.back.util.Response;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ public class ClientController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateClient(@Valid @RequestBody UpdateClientDto updateClientDto, @PathVariable Long id){
         ClientEntity clientEntity = clientRepository.update(updateClientDto,id);
-        return ResponseEntity.status(200).body(clientEntity);
+        Response<?> response = new Response<>(true,"Actualizacion exitosa", clientEntity);
+        return ResponseEntity.status(200).body(response);
     }
 }
