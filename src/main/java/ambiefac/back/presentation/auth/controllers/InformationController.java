@@ -33,8 +33,18 @@ public class InformationController {
 
     @GetMapping("bySubtopic/{id}")
     public ResponseEntity<?> findInformationOfSubtopic(@PathVariable Long id){
-        Response<?> response = new Response<>(true,"Consulta exitosa", informationRepository.findInformationOfSubtopic(id));
-        return ResponseEntity.status(200).body(response);
+
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            resultado.put("data", informationRepository.findInformationOfSubtopic(id));
+            resultado.put("success", true);
+            resultado.put("message", "Consulta exitosa");
+        } catch (Exception e) {
+            resultado.put("success", false);
+            resultado.put("message", "Error al procesar la consulta: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body(resultado);
+
     }
 
     @PutMapping("/update")

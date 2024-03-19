@@ -17,42 +17,45 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-public class Topic{
+public class Topic {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Topic(){}
+    public Topic() {
+    }
 
 
-
-
-
-    public List<TopicResponse> findTopic(){
+    public List<TopicResponse> findTopic() {
 
         String sql = "SELECT\n" +
                 "  topic.id,\n" +
-                "  topic.name, topic.time, topic.link_image,\n" +
+                "  topic.name, topic.description, topic.time, topic.link_image,\n" +
                 "  subtopic.id,\n" +
+                "  exam.id AS 'exam_id',"+
                 "  subtopic.name AS 'subtopic_name'\n" +
                 "FROM\n" +
                 "  topic\n" +
                 "  LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
-                "  LEFT JOIN information ON subtopic.id = information.subtopic WHERE topic.deleted = false";
+                "  LEFT JOIN information ON subtopic.id = information.subtopic " +
+                "  LEFT JOIN exam ON topic.id = exam.topic" +
+                "  WHERE topic.deleted = false";
 
         Map<Long, TopicResponse> topicMap = new HashMap<>();
-         jdbcTemplate.query(sql, new RowMapper<TopicResponse>() {
+        jdbcTemplate.query(sql, new RowMapper<TopicResponse>() {
             @Override
             public TopicResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
 
                 Long topicId = rs.getLong("id");
-                if(!topicMap.containsKey(topicId)){
+                if (!topicMap.containsKey(topicId)) {
                     TopicResponse topicResponse = new TopicResponse();
                     topicResponse.setId(topicId);
                     topicResponse.setName(rs.getString("name"));
+                    topicResponse.setDescription(rs.getString("description"));
                     topicResponse.setTime(rs.getString("time"));
                     topicResponse.setLinkImage(rs.getString("link_image"));
+                    topicResponse.setExam_id(rs.getLong("exam_id"));
                     topicResponse.setSubtopic(new ArrayList<>());
-                    topicMap.put(topicId,topicResponse);
+                    topicMap.put(topicId, topicResponse);
                 }
 
                 SubtopicResponse subtopicResponse = new SubtopicResponse();
@@ -61,12 +64,10 @@ public class Topic{
                 subtopicResponse.setInformation(new ArrayList<>());
 
 
-
-
                 topicMap.get(topicId).getSubtopic().add(subtopicResponse);
 
 
-            return null;
+                return null;
 
             }
 
@@ -77,54 +78,72 @@ public class Topic{
     }
 
     public TopicResponse obtenerInformacionPorCurso(@Param("cursoId") Long cursoId) {
-        String sql = "SELECT topic.id, topic.name, topic.time, topic.link_image, subtopic.id AS subtopic_id, \n" +
-                "subtopic.name AS subtopic_name, information.id AS information_id,\n" +
-                " information.content, information.type, information.position,\n" +
-                " exam.id AS exam_id\n" +
-                "FROM topic LEFT JOIN subtopic ON topic.id = subtopic.topic\n" +
-                "left JOIN exam ON exam.topic = topic.id\n" +
-                "LEFT JOIN information ON subtopic.id = information.subtopic WHERE topic.id = ?\n" +
+        String sql = "SELECT topic.id, topic.name, topic.description, topic.time, topic.link_image, " +
+                "subtopic.id AS subtopic_id, subtopic.name AS subtopic_name, " +
+                "information.id AS information_id, information.content, information.title, " +
+                "information.type, information.position, exam.id AS exam_id " +
+                "FROM topic LEFT JOIN subtopic ON topic.id = subtopic.topic " +
+                "LEFT JOIN exam ON exam.topic = topic.id " +
+                "LEFT JOIN information ON subtopic.id = information.subtopic " +
+                "WHERE topic.id = ? " +
                 "ORDER BY topic.name ";
 
-        Map<Long, TopicResponse> topicMap = new HashMap<>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, cursoId);
 
-        List<TopicResponse> result = jdbcTemplate.query(sql, new Object[]{cursoId}, (rs, rowNum) -> {
-            Long topicId = rs.getLong("id");
+        if (rows.isEmpty()) {
+            return null;
+        }
+
+        Map<Long, TopicResponse> topicMap = new LinkedHashMap<>();
+
+        for (Map<String, Object> row : rows) {
+            Long topicId = (Long) row.get("id");
 
             if (!topicMap.containsKey(topicId)) {
                 TopicResponse topicDTO = new TopicResponse();
                 topicDTO.setId(topicId);
-                topicDTO.setName(rs.getString("name"));
-                topicDTO.setTime(rs.getString("time"));
-                topicDTO.setLinkImage(rs.getString("link_image"));
-                topicDTO.setExam_id(rs.getLong("exam_id"));
+                topicDTO.setName((String) row.get("name"));
+                topicDTO.setDescription((String) row.get("description"));
+                topicDTO.setTime((String) row.get("time"));
+                topicDTO.setLinkImage((String) row.get("link_image"));
+                topicDTO.setExam_id((Long) row.get("exam_id"));
                 topicDTO.setSubtopic(new ArrayList<>());
                 topicMap.put(topicId, topicDTO);
             }
 
             SubtopicResponse subtopicDTO = new SubtopicResponse();
-            subtopicDTO.setSubtopic_id(rs.getLong("subtopic_id"));
-            subtopicDTO.setSubtopic_name(rs.getString("subtopic_name"));
+            subtopicDTO.setSubtopic_id((Long) row.get("subtopic_id"));
+            subtopicDTO.setSubtopic_name((String) row.get("subtopic_name"));
 
             InformationResponse informationDTO = new InformationResponse();
-            informationDTO.setInformation_id(rs.getLong("information_id"));
-            informationDTO.setContent(rs.getString("content"));
-            informationDTO.setPosition(rs.getLong("position"));
+            informationDTO.setInformation_id((Long) row.get("information_id"));
+            informationDTO.setContent((String) row.get("content"));
+            informationDTO.setTitle((String) row.get("title"));
+            informationDTO.setType((String) row.get("type"));
+            informationDTO.setPosition((Long) row.get("position"));
 
-            topicMap.get(topicId).getSubtopic().add(subtopicDTO);
-            subtopicDTO.setInformation(Collections.singletonList(informationDTO));
+            TopicResponse topic = topicMap.get(topicId);
+            List<SubtopicResponse> subtopics = topic.getSubtopic();
 
-            return null;
-        });
+            SubtopicResponse existingSubtopic = subtopics.stream()
+                    .filter(subtopic -> subtopic.getSubtopic_id().equals(subtopicDTO.getSubtopic_id()))
+                    .findFirst()
+                    .orElse(null);
 
-        List<TopicResponse> resultList = new ArrayList<>(topicMap.values());
+            if (existingSubtopic == null) {
+                subtopicDTO.setInformation(new ArrayList<>());
+                subtopics.add(subtopicDTO);
+                existingSubtopic = subtopicDTO;
+            }
 
+            existingSubtopic.getInformation().add(informationDTO);
+        }
 
-        return resultList.isEmpty() ? null : resultList.get(0);
+        return topicMap.values().iterator().next();
     }
 
 
-    public List<TopicResponse> findTopicByKeyword( String jsonKeyword) {
+    public List<TopicResponse> findTopicByKeyword(String jsonKeyword) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode keywordNode;
@@ -161,9 +180,6 @@ public class Topic{
 
         return topics;
     }
-
-
-
 
 
 }
