@@ -51,7 +51,7 @@ public class SubtopicController {
 
     }
 
-    @PutMapping("update")
+    @PutMapping("update/{id}")
     public ResponseEntity<?> updateSubtopicsOfTopic(@RequestBody UpdateSubtopicDto updateSubtopicDto) {
         return ResponseEntity.status(200).body(subtopicRepository.update(updateSubtopicDto));
     }
