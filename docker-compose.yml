@@ -4,7 +4,7 @@ services:
     image: mysql:latest
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: Esteban1102
+      MYSQL_ROOT_PASSWORD: 2001
       MYSQL_DATABASE: ambiefacBd
     ports:
       - "3306:3306"
@@ -14,7 +14,7 @@ services:
       - my_network
 
   spring-app:
-    image: estsban1102/backendappambiefac-spring-app:1.0.3
+    image: bladimirvargas/backend-ambiefacapp-pdn:1.0.1
     container_name: spring-container
     ports:
       - "8080:8080"

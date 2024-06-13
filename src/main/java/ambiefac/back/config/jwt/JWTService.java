@@ -55,9 +55,11 @@ public class JWTService {
     private static boolean isTokenExpired(String token){
         return  getExpiration(token).before(new Date());
     }
-    Date currentDate = new Date();
-    long expirationTime = currentDate.getTime() + (1000 * 60 * 60 * 24);
+
     private String getToken(Map<String, Object> extraClaims, UserDetails user){
+        Date currentDate = new Date();
+        long expirationTime = currentDate.getTime() + (1000 * 60 * 60 * 24);
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)

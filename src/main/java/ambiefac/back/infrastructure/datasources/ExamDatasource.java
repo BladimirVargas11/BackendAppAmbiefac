@@ -21,7 +21,7 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     private final QuestionAnswer questionAnswerRepository;
     private final TopicSave topicSave;
     private final ExamQuery examQuery;
-    private  final  ClientTopic clientTopixRepository;
+    private final ClientTopic clientTopixRepository;
 
     public ExamDatasource(Exam examRepository, QuestionExam questionExamRepository, QuestionAnswer questionAnswerRepository, TopicSave topicSave, ExamQuery examQuery,
                           ClientTopic clientTopic) {
@@ -36,17 +36,17 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     @Override
     public String save(RegisterExamDto examDto) {
         Optional<TopicEntity> topic = topicSave.findById(examDto.getIdTopic());
-        if(topic.isPresent()){
+        if (topic.isPresent()) {
             ExamEntity exam = new ExamEntity();
             exam.setTopic(topic.get());
             examRepository.save(exam);
 
-            for(RegisterQuestionDto registerQuestionDto: examDto.getQuestions()){
+            for (RegisterQuestionDto registerQuestionDto : examDto.getQuestions()) {
                 ExamQuestionEntity examQuestionEntity = new ExamQuestionEntity();
                 examQuestionEntity.setQuestionStatement(registerQuestionDto.getQuestionStatement());
                 examQuestionEntity.setExam(exam);
                 questionExamRepository.save(examQuestionEntity);
-                for (RegisterAnswerDto registerAnswerDto: registerQuestionDto.getAnswers()){
+                for (RegisterAnswerDto registerAnswerDto : registerQuestionDto.getAnswers()) {
                     QuestionAnswerEntity answerEntity = new QuestionAnswerEntity();
                     answerEntity.setAnswerText(registerAnswerDto.getAnswerText());
                     answerEntity.setCorrect(registerAnswerDto.getCorrect());
@@ -54,21 +54,21 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
                     questionAnswerRepository.save(answerEntity);
                 }
             }
-            return "Se registro exitosamente";
+            return "Se registró exitosamente";
 
-        }else {
+        } else {
             throw new EntityNotFoundException("There is no topic with this id");
         }
     }
 
     @Override
     public String updateQuestions(UpdateQuestionsListDto updateQuestionsListDto) {
-        for(UpdateQuestionDto updateQuestionDto: updateQuestionsListDto.getQuestions()){
+        for (UpdateQuestionDto updateQuestionDto : updateQuestionsListDto.getQuestions()) {
             Optional<ExamQuestionEntity> question = questionExamRepository.findById(updateQuestionDto.getId());
-            if(question.isPresent()){
+            if (question.isPresent()) {
                 question.get().setQuestionStatement(updateQuestionDto.getQuestionStatement());
                 questionExamRepository.save(question.get());
-            }else{
+            } else {
                 throw new EntityNotFoundException("No existe una pregunta con este id");
             }
 
@@ -78,13 +78,13 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
 
     @Override
     public String updateAnswers(UpdateAnswersListDto updateAnswersListDto) {
-        for(UpdateAnswerDto updateAnswerDto: updateAnswersListDto.getAnswers()){
+        for (UpdateAnswerDto updateAnswerDto : updateAnswersListDto.getAnswers()) {
             Optional<QuestionAnswerEntity> answer = questionAnswerRepository.findById(updateAnswerDto.getId());
-            if(answer.isPresent()){
+            if (answer.isPresent()) {
                 answer.get().setAnswerText(updateAnswerDto.getAnswerText());
                 answer.get().setCorrect(updateAnswerDto.getCorrect());
                 questionAnswerRepository.save(answer.get());
-            }else{
+            } else {
                 throw new EntityNotFoundException("No existe un examen con este id");
             }
 
@@ -95,14 +95,14 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     @Override
     public AnswersResponse validAnswers(ValidAnswersDto validAnswersDto) {
         List<AnswerResponse> listAnswers = new ArrayList<>();
-        for(AnswersIdsDto answersIdsDto: validAnswersDto.getAnswersIds()){
+        for (AnswersIdsDto answersIdsDto : validAnswersDto.getAnswersIds()) {
             Optional<QuestionAnswerEntity> answer = questionAnswerRepository.findById(answersIdsDto.getId());
-            if(answer.isPresent()){
-              AnswerResponse answerResponse = new AnswerResponse();
-              answerResponse.setId(answer.get().getId());
-              answerResponse.setCorrect(answer.get().getCorrect());
-              listAnswers.add(answerResponse);
-            }else{
+            if (answer.isPresent()) {
+                AnswerResponse answerResponse = new AnswerResponse();
+                answerResponse.setId(answer.get().getId());
+                answerResponse.setCorrect(answer.get().getCorrect());
+                listAnswers.add(answerResponse);
+            } else {
                 throw new EntityNotFoundException("No existe una respuesta con este id ");
             }
         }
@@ -110,10 +110,10 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
         answersResponse.setAnswers(listAnswers);
         answersResponse.setScore(calculateScore(listAnswers));
         var validExist = clientTopixRepository.findByClientIdAndTopicId(validAnswersDto.getIdClient(), validAnswersDto.getIdTopic());
-        if(validExist.isPresent()){
+        if (validExist.isPresent()) {
             validExist.get().setScore(calculateScore(listAnswers));
             clientTopixRepository.save(validExist.get());
-        }else {
+        } else {
             throw new EntityNotFoundException("No existe un registro de examen con estos id");
         }
 
@@ -124,9 +124,9 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
 
     @Override
     public ExamResponse findQuestionsWithAnswers(Long id) {
-        try{
+        try {
             return examQuery.findExamWithQuestions(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -135,20 +135,20 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     public String saveNewQuestions(Long id, RegisterQuestionDto registerQuestionDto) {
         Optional<ExamEntity> examEntity = examRepository.findById(id);
 
-        if(examEntity.isPresent()){
+        if (examEntity.isPresent()) {
             ExamQuestionEntity question = new ExamQuestionEntity();
-          question.setQuestionStatement(registerQuestionDto.getQuestionStatement());
-          questionExamRepository.save(question);
-          for(RegisterAnswerDto answer : registerQuestionDto.getAnswers()){
-              var answerEntity = new QuestionAnswerEntity();
-              answerEntity.setAnswerText(answer.getAnswerText());
-              answerEntity.setCorrect(answer.getCorrect());
-              answerEntity.setQuestion(question);
-              questionAnswerRepository.save(answerEntity);
-          }
-          question.setExam(examEntity.get());
-          return "Se registro con exito";
-        }else{
+            question.setQuestionStatement(registerQuestionDto.getQuestionStatement());
+            question.setExam(examEntity.get());
+            questionExamRepository.save(question);
+            for (RegisterAnswerDto answer : registerQuestionDto.getAnswers()) {
+                var answerEntity = new QuestionAnswerEntity();
+                answerEntity.setAnswerText(answer.getAnswerText());
+                answerEntity.setCorrect(answer.getCorrect());
+                answerEntity.setQuestion(question);
+                questionAnswerRepository.save(answerEntity);
+            }
+            return "Se registro con exito";
+        } else {
             throw new EntityNotFoundException("No existe un examen con este id");
         }
     }
@@ -175,10 +175,10 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     @Override
     public String Deletequestion(Long id) {
         Optional<ExamQuestionEntity> question = questionExamRepository.findById(id);
-        if(question.isPresent()){
+        if (question.isPresent()) {
             questionExamRepository.delete(question.get());
             return "Se elimino con exito";
-        }else {
+        } else {
             throw new EntityNotFoundException("No hay un registro con este id");
         }
     }
@@ -186,24 +186,24 @@ public class ExamDatasource extends ambiefac.back.domain.datasources.ExamDatasou
     @Override
     public String deleteAnswer(Long id) {
         Optional<QuestionAnswerEntity> answer = questionAnswerRepository.findById(id);
-        if(answer.isPresent()){
+        if (answer.isPresent()) {
             questionAnswerRepository.delete(answer.get());
             return "Se elimino con exito";
-        }else {
+        } else {
             throw new EntityNotFoundException("No hay un registro con este id");
         }
     }
 
-    public int calculateScore(List<AnswerResponse> listAnswers){
+    public int calculateScore(List<AnswerResponse> listAnswers) {
         int answersCorrect = 0;
-        for(AnswerResponse answersIdsDto : listAnswers){
-            if(answersIdsDto.getCorrect()){
+        for (AnswerResponse answersIdsDto : listAnswers) {
+            if (answersIdsDto.getCorrect()) {
                 answersCorrect++;
             }
         }
         double total = ((double) answersCorrect / listAnswers.size()) * 100;
 
-        return Math.round((float)total);
+        return Math.round((float) total);
     }
 
 }
