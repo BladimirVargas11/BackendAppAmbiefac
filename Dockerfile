@@ -1,4 +1,5 @@
-FROM alpine:latest
+# Especifica la plataforma para la imagen base
+FROM --platform=linux/arm64/v8 alpine:latest
 
 RUN apk add openjdk17
 RUN apk update

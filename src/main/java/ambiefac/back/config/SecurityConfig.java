@@ -32,17 +32,11 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-        return  httpSecurity
+        return httpSecurity
                 .csrf(csrf->csrf.disable())
                 .cors(withDefaults())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/topic/**").permitAll()
-                        .requestMatchers("/topic/search").permitAll()
-                        .requestMatchers("/v1/authenticate","/v3/api-docs/**",
-                                "/swagger-ui/**","/swagger-ui.html").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Permitir todas las solicitudes sin autenticación
                 )
                 .sessionManagement(session-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -50,6 +44,8 @@ public class SecurityConfig{
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+
 
 
 }
